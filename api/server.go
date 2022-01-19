@@ -1,35 +1,22 @@
 package api
 
 import (
-	"fmt"
 	"log"
+	"os"
 
-	"github.com/mkrs2404/eKYC/api/models"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"github.com/joho/godotenv"
+	"github.com/mkrs2404/eKYC/api/controllers"
 )
 
-type Server struct {
-	DB *gorm.DB
-}
+var server = controllers.Server{}
 
-func (server *Server) InitializeDatabase(DbHost, DbName, DbUser, DbPassword, DbPort string) {
-	var err error
-
-	//Creating DSN string
-	connection_string := fmt.Sprintf("host=%s dbname=%s user=%s password=%s port=%s sslmode=disable", DbHost, DbName, DbUser, DbPassword, DbPort)
-
-	//Opening Postgres connection
-	server.DB, err = gorm.Open(postgres.New(postgres.Config{DSN: connection_string}), &gorm.Config{})
-	HandleError(err)
-
-	//Migrating tables to the database
-	server.DB.Debug().AutoMigrate(&models.Plan{}, &models.Client{})
-
-}
-
-func HandleError(err error) {
+func Run() {
+	//Loading env variables
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Error fetching the environment values")
+	} else {
+		server.InitializeDatabase(os.Getenv("DB_HOST"), os.Getenv("DB_NAME"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"))
+		server.InitializeRouter(os.Getenv("SERVER_ADDR"))
 	}
 }
