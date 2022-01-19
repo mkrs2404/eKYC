@@ -1,32 +1,22 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"os"
 
-	_ "github.com/lib/pq"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"github.com/joho/godotenv"
+	"github.com/mkrs2404/eKYC/api"
 )
+
+var server = api.Server{}
 
 func main() {
 
-	connection_string := "host=localhost user=postgres password=postgres port=5432 sslmode=disable"
-	db, err := gorm.Open(postgres.New(postgres.Config{DSN: connection_string}), &gorm.Config{})
-	handleError(err)
-
-	database, err := db.DB()
-	handleError(err)
-
-	err = database.Ping()
-	handleError(err)
-
-	fmt.Println("Connected to Postgres")
-
-}
-
-func handleError(err error) {
+	//Loading env variables
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Error fetching the environment values")
+	} else {
+		server.InitializeDatabase(os.Getenv("DB_HOST"), os.Getenv("DB_NAME"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"))
 	}
 }

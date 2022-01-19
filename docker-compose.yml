@@ -12,4 +12,14 @@ services:
       - ./pgdata:/var/lib/postgresql/data
     ports: 
       - "5432:5432"
-  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mohit@one2n.in
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ./pgadmin-data:/var/lib/pgadmin
