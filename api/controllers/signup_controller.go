@@ -7,7 +7,7 @@ import (
 	"github.com/mkrs2404/eKYC/api/resources"
 )
 
-func (server *Server) signUp(c *gin.Context) {
+func signUp(c *gin.Context) {
 
 	var signUpRequest resources.SignUpRequest
 	err := c.ShouldBindJSON(&signUpRequest)

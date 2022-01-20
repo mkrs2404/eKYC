@@ -1,8 +1,10 @@
 package controllers
 
-func (server *Server) InitializeRoutes() {
+import "github.com/gin-gonic/gin"
+
+func InitializeRoutes(router *gin.Engine) {
 
 	//Signup API routes
-	server.Router.POST("/api/v1/signup", server.signUp)
+	router.POST("/api/v1/signup", signUp)
 
 }
