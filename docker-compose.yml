@@ -9,9 +9,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     ports: 
       - "5432:5432"
+  
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4
@@ -22,4 +23,8 @@ services:
       PGADMIN_DEFAULT_EMAIL: mohit@one2n.in
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - ./pgadmin-data:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  pgdata:
+  pgadmin-data:
