@@ -11,6 +11,7 @@ import (
 
 var DB *gorm.DB
 
+//Connect connects to the database and assigns the connection to global variable DB
 func Connect(dbHost, dbName, dbUser, dbPassword, dbPort string) {
 
 	//Creating DSN string

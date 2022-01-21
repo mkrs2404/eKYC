@@ -1,4 +1,4 @@
-package services
+package auth
 
 import (
 	"log"
@@ -9,7 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go/v4"
 )
 
-//This method generates a JWT key with the user Id in the payload
+//GenerateToken generates a JWT key with the user Id in the payload
 func GenerateToken(userId int, expiryDelay int) (string, error) {
 
 	secretKey := os.Getenv("SECRET_KEY")
