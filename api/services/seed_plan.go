@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/mkrs2404/eKYC/api/database"
 	"github.com/mkrs2404/eKYC/api/models"
+	"github.com/mkrs2404/eKYC/database"
 )
 
 //Plan modifications can be done here
@@ -27,7 +27,7 @@ var plans = []models.Plan{
 	},
 }
 
-//This method seeds the DB with the available plans.
+//SeedPlanData seeds the DB with the available plans.
 func SeedPlanData() {
 	localPlans := make([]models.Plan, len(plans))
 	copy(localPlans, plans)

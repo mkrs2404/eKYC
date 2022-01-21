@@ -11,9 +11,11 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/mkrs2404/eKYC/api/resources"
 	"github.com/mkrs2404/eKYC/api/services"
+	"github.com/mkrs2404/eKYC/auth"
 )
 
-func signUp(c *gin.Context) {
+//Handler for /api/v1/signup
+func SignUp(c *gin.Context) {
 
 	//Fetching the JWT token delay from env variables
 	tokenExpiryDelay := os.Getenv("TOKEN_EXPIRY_DELAY")
@@ -52,7 +54,7 @@ func signUp(c *gin.Context) {
 	}
 
 	//Generating JWT token to send back as response
-	token, err := services.GenerateToken(int(client.ID), expiryDelay)
+	token, err := auth.GenerateToken(int(client.ID), expiryDelay)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Sign Up failed"})
 		c.Abort()
@@ -61,7 +63,7 @@ func signUp(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"access_key": token})
 }
 
-/*This method sends the response back with proper errors during validation.
+/*reportValidationFailure sends the response back with proper errors during validation.
   It returns whether there was a validation error or not*/
 func reportValidationFailure(err error, c *gin.Context) bool {
 	if err != nil {
@@ -81,7 +83,7 @@ func reportValidationFailure(err error, c *gin.Context) bool {
 	return false
 }
 
-// This method returns the error message for the type of error passed to it
+//msgForTag returns the error message for the type of error passed to it
 func msgForTag(tag string) string {
 	switch tag {
 	case "required":

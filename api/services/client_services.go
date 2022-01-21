@@ -4,12 +4,12 @@ import (
 	"errors"
 
 	"github.com/jackc/pgconn"
-	"github.com/mkrs2404/eKYC/api/database"
 	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/resources"
+	"github.com/mkrs2404/eKYC/database"
 )
 
-//This method creates a client object from the provided request data
+//CreateClientFromRequest creates a client object from the provided request data
 func CreateClientFromRequest(signUpRequest resources.SignUpRequest) models.Client {
 	var client models.Client
 	client.Name = signUpRequest.Name
@@ -18,7 +18,7 @@ func CreateClientFromRequest(signUpRequest resources.SignUpRequest) models.Clien
 	return client
 }
 
-/*This method saves the client to the DB
+/*SaveClient saves the client to the DB
   and returns back an error if there's email duplicacy*/
 func SaveClient(client *models.Client) error {
 	err := database.DB.Debug().Create(client).Error

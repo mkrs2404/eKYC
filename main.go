@@ -5,13 +5,12 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/mkrs2404/eKYC/api/database"
-	"github.com/mkrs2404/eKYC/api/server"
 	"github.com/mkrs2404/eKYC/api/services"
+	"github.com/mkrs2404/eKYC/database"
+	"github.com/mkrs2404/eKYC/server"
 )
 
 func main() {
-	//api.Run()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error fetching the environment values")
