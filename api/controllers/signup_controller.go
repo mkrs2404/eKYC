@@ -60,7 +60,7 @@ func SignUp(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"access_key": token})
+	c.JSON(http.StatusCreated, gin.H{"access_key": token})
 }
 
 /*reportValidationFailure sends the response back with proper errors during validation.
