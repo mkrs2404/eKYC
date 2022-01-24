@@ -6,11 +6,8 @@ build:
 run:
 	@echo "Starting up docker..."
 	@docker-compose up -d --remove-orphans
-	./eKYC.o
-
-build_and_run:
 	make build
-	make run
+	./eKYC.o
 
 test:
 	go test -v ./api/controllers/...
