@@ -8,6 +8,8 @@ import (
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
 	"github.com/mkrs2404/eKYC/server"
+	_ "github.com/mkrs2404/eKYC/server"
+	"gorm.io/gorm/logger"
 )
 
 func main() {
@@ -15,8 +17,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching the environment values")
 	} else {
-		database.Connect(os.Getenv("DB_HOST"), os.Getenv("DB_NAME"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"))
+		database.Connect(os.Getenv("DB_HOST"), os.Getenv("DB_NAME"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), logger.Error)
 		services.SeedPlanData()
-		server.InitializeRouter(os.Getenv("SERVER_ADDR"))
+		server.InitializeRouter()
 	}
 }
