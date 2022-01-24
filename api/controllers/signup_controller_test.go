@@ -12,6 +12,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
+	"gorm.io/gorm/logger"
 )
 
 var signupTestData = []struct {
@@ -47,18 +48,19 @@ var signupTestData = []struct {
 
 var signUpUrl = "/api/v1/signup"
 
+//Setting up DB connection and data seeding
 func TestMain(t *testing.T) {
 	err := godotenv.Load("../../.env")
 	if err != nil {
 		log.Fatal("Error fetching the environment values")
 	} else {
-		database.Connect(os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_PORT"))
+		database.Connect(os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_PORT"), logger.Silent)
 		services.SeedPlanData()
 		database.DB.Exec("DELETE FROM clients")
 	}
 }
 
-func TestSignUp(t *testing.T) {
+func TestSignUpClient(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.New()
 
@@ -66,7 +68,7 @@ func TestSignUp(t *testing.T) {
 		resRecorder := httptest.NewRecorder()
 		ctx, _ := gin.CreateTestContext(resRecorder)
 		ctx.Request, _ = http.NewRequest(http.MethodPost, signUpUrl, strings.NewReader(data.body))
-		SignUp(ctx)
+		SignUpClient(ctx)
 		router.ServeHTTP(resRecorder, ctx.Request)
 
 		if resRecorder.Code != data.expectedCode {
