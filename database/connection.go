@@ -14,14 +14,14 @@ import (
 var DB *gorm.DB
 
 //Connect connects to the database and assigns the connection to global variable DB
-func Connect(dbHost string, dbName string, dbUser string, dbPassword string, dbPort string) {
+func Connect(dbHost string, dbName string, dbUser string, dbPassword string, dbPort string, loggerLevel logger.LogLevel) {
 
 	//Creating DSN string
 	connection_string := fmt.Sprintf("host=%s dbname=%s user=%s password=%s port=%s sslmode=disable", dbHost, dbName, dbUser, dbPassword, dbPort)
 
 	//Opening Postgres connection
 	connection, err := gorm.Open(postgres.New(postgres.Config{DSN: connection_string}), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(loggerLevel),
 	})
 
 	db, _ := connection.DB()
@@ -40,6 +40,6 @@ func Connect(dbHost string, dbName string, dbUser string, dbPassword string, dbP
 	DB = connection
 
 	//Migrating tables to the database
-	DB.Debug().AutoMigrate(&models.Plan{}, &models.Client{})
+	DB.AutoMigrate(&models.Plan{}, &models.Client{})
 
 }
