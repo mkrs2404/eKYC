@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitializeRouter(serverPort string) {
+func InitializeRouter(serverPort string) *gin.Engine {
 
 	//Setting up Router
 	router := gin.Default()
@@ -12,4 +12,5 @@ func InitializeRouter(serverPort string) {
 
 	//Starting up Server
 	router.Run(serverPort)
+	return router
 }
