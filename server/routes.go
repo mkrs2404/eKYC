@@ -7,6 +7,11 @@ import (
 
 func InitializeRoutes(router *gin.Engine) {
 
+	//Default routes
+	router.POST("/", controllers.WelcomePage)
+	router.GET("/", controllers.WelcomePage)
+	router.NoRoute(controllers.NoRoute)
+
 	//Signup API routes
 	router.POST("/api/v1/signup", controllers.SignUp)
 
