@@ -11,6 +11,9 @@ run:
 build_and_run:
 	make build
 	make run
+
+test:
+	go test -v ./api/controllers/...
 	
 clean:
 	@echo "Shutting down docker..."
