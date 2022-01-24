@@ -38,6 +38,6 @@ func SeedPlanData() {
 	}
 
 	for i, plan := range plans {
-		database.DB.Debug().Model(&plan).Where("ID = ?", localPlans[i].ID).Updates(models.Plan{DailyBaseCost: plan.DailyBaseCost, ApiCost: plan.ApiCost, StorageCost: plan.StorageCost})
+		database.DB.Model(&plan).Where("ID = ?", localPlans[i].ID).Updates(models.Plan{DailyBaseCost: plan.DailyBaseCost, ApiCost: plan.ApiCost, StorageCost: plan.StorageCost})
 	}
 }
