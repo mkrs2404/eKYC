@@ -2,10 +2,7 @@ package controllers
 
 import (
 	"errors"
-	"log"
 	"net/http"
-	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -15,22 +12,12 @@ import (
 )
 
 //Handler for /api/v1/signup
-func SignUp(c *gin.Context) {
-
-	//Fetching the JWT token delay from env variables
-	tokenExpiryDelay := os.Getenv("TOKEN_EXPIRY_DELAY")
-	if len(tokenExpiryDelay) == 0 {
-		log.Fatal("Token expiry delay not found")
-	}
-
-	expiryDelay, err := strconv.Atoi(tokenExpiryDelay)
-	if err != nil {
-		log.Fatal("Incorrect delay provided")
-	}
+func SignUpClient(c *gin.Context) {
 
 	var signUpRequest resources.SignUpRequest
+
 	//Validating request
-	err = c.ShouldBindJSON(&signUpRequest)
+	err := c.ShouldBindJSON(&signUpRequest)
 	failure := reportValidationFailure(err, c)
 	if failure {
 		return
@@ -42,29 +29,33 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	//Creating client object from the request
-	client := services.CreateClientFromRequest(signUpRequest)
-
 	//Saving the client to the DB
-	err = services.SaveClient(&client)
+	client, err := services.SaveClient(signUpRequest)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "Sign Up failed", "err": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": "sign Up failed",
+			"err": err.Error(),
+		})
 		c.Abort()
 		return
 	}
 
 	//Generating JWT token to send back as response
-	token, err := auth.GenerateToken(int(client.ID), expiryDelay)
+	token, err := auth.GenerateToken(int(client.ID))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"msg": "Sign Up failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"msg": "sign Up failed",
+		})
 		c.Abort()
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"access_key": token})
+	c.JSON(http.StatusCreated, gin.H{
+		"access_key": token,
+	})
 }
 
 /*reportValidationFailure sends the response back with proper errors during validation.
-  It returns whether there was a validation error or not*/
+It returns whether there was a validation error or not*/
 func reportValidationFailure(err error, c *gin.Context) bool {
 	if err != nil {
 		var validatorErr validator.ValidationErrors
@@ -75,7 +66,9 @@ func reportValidationFailure(err error, c *gin.Context) bool {
 				errorMsg += error.Field() + " : " + msgForTag(error.Tag()) + "; "
 			}
 			//Sending the error response
-			c.JSON(http.StatusBadRequest, gin.H{"errorMsg": errorMsg[:len(errorMsg)-2]})
+			c.JSON(http.StatusBadRequest, gin.H{
+				"errorMsg": errorMsg[:len(errorMsg)-2],
+			})
 		}
 		c.Abort()
 		return true
@@ -91,7 +84,7 @@ func msgForTag(tag string) string {
 	case "email":
 		return "Invalid"
 	case "oneof":
-		return "Should be one of basic advanced enterprise"
+		return "Should be one of basic, advanced or enterprise"
 	}
 	return ""
 }
