@@ -38,7 +38,7 @@ Run following commands in the root directory:
 
 - Run
 ```
-make run
+make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> server=<IP:Port> run
 ```
 
 - Test
