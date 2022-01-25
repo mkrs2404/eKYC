@@ -40,6 +40,6 @@ func Connect(dbHost string, dbName string, dbUser string, dbPassword string, dbP
 	DB = connection
 
 	//Migrating tables to the database
-	DB.AutoMigrate(&models.Plan{}, &models.Client{})
+	DB.AutoMigrate(&models.Plan{}, &models.Client{}, &models.File{})
 
 }
