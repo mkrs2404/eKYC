@@ -8,8 +8,27 @@ import (
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
 	"github.com/mkrs2404/eKYC/server"
+	"gopkg.in/alecthomas/kingpin.v2"
 	"gorm.io/gorm/logger"
 )
+
+func init() {
+	var (
+		hostname       = kingpin.Flag("host", "Hostname").Required().String()
+		dbname         = kingpin.Flag("db", "Database name").Required().String()
+		user           = kingpin.Flag("user", "Username").Required().String()
+		password       = kingpin.Flag("pwd", "Password").Required().String()
+		port           = kingpin.Flag("port", "Database port").Required().String()
+		server_address = kingpin.Flag("server", "Server_IP:Port").Required().String()
+	)
+	kingpin.Parse()
+	os.Setenv("DB_HOST", *hostname)
+	os.Setenv("DB_NAME", *dbname)
+	os.Setenv("DB_USER", *user)
+	os.Setenv("DB_PASSWORD", *password)
+	os.Setenv("DB_PORT", *port)
+	os.Setenv("SERVER_ADDR", *server_address)
+}
 
 func main() {
 	err := godotenv.Load()
