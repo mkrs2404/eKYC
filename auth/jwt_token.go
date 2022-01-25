@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"log"
 	"os"
 	"strconv"
@@ -37,4 +38,23 @@ func GenerateToken(userId int) (string, error) {
 	token, err := claims.SignedString([]byte(secretKey))
 
 	return token, err
+}
+
+//ValidateToken takes the tokenString from the request and validates if it is authentic. If yes, clientId is returned, else, unauthorized error is returned
+func ValidateToken(tokenString string) (int, error) {
+	secretKey := os.Getenv("SECRET_KEY")
+	if len(secretKey) == 0 {
+		log.Fatal("Secret Key not found")
+	}
+
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(secretKey), nil
+	})
+	if err != nil {
+		return -1, errors.New("unauthorized")
+	}
+
+	claims := token.Claims.(jwt.StandardClaims)
+	clientId, _ := strconv.Atoi(claims.Issuer)
+	return clientId, err
 }
