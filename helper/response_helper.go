@@ -3,6 +3,7 @@ package helper
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -19,7 +20,7 @@ func ReportValidationFailure(err error, c *gin.Context) bool {
 	//Checking the type of validation error
 	if errors.As(err, &validatorErr) {
 		for _, error := range validatorErr {
-			errorMsg += error.Field() + " : " + MsgForTag(error.Tag()) + "; "
+			errorMsg += error.Field() + " : " + MsgForTag(error.Tag(), error.Field()) + "; "
 		}
 		//Sending the error response
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -31,14 +32,19 @@ func ReportValidationFailure(err error, c *gin.Context) bool {
 }
 
 //MsgForTag returns the error message for the type of error passed to it
-func MsgForTag(tag string) string {
+func MsgForTag(tag string, field string) string {
 	switch tag {
 	case "required":
 		return "This field is required"
 	case "email":
 		return "Invalid"
 	case "oneof":
-		return "Should be one of basic, advanced or enterprise"
+		if strings.EqualFold(field, "imagetype") {
+			return "Should be one of face or id_card"
+		} else if strings.EqualFold(field, "plan") {
+			return "Should be one of basic, advanced or enterprise"
+		}
+		return ""
 	}
 	return ""
 }
