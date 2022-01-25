@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
+	_ "github.com/mkrs2404/eKYC/minio_client"
 	"github.com/mkrs2404/eKYC/server"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gorm.io/gorm/logger"
