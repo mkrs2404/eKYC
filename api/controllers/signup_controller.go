@@ -41,7 +41,7 @@ func SignUpClient(c *gin.Context) {
 	}
 
 	//Generating JWT token to send back as response
-	token, err := auth.GenerateToken(int(client.ID))
+	token, err := auth.GenerateToken(client.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"msg": messages.SIGN_UP_FAILED,
