@@ -14,4 +14,7 @@ func InitializeRoutes(router *gin.Engine) {
 	//Signup API routes
 	router.POST("/api/v1/signup", controllers.SignUpClient)
 
+	//Image Upload API routes
+	router.POST("/api/v1/image", controllers.UploadImage)
+
 }
