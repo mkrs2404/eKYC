@@ -9,4 +9,5 @@ type Client struct {
 	Email     string `gorm:"type:varchar(100);uniqueIndex;not null"`
 	AccessKey string `gorm:"type:varchar(100)" json:"access_key"`
 	Plan      uint
+	File      File `gorm:"foreignKey:ClientID"`
 }
