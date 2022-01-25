@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/api/controllers"
+	"github.com/mkrs2404/eKYC/api/middlewares"
 )
 
 func InitializeRoutes(router *gin.Engine) {
@@ -15,6 +16,6 @@ func InitializeRoutes(router *gin.Engine) {
 	router.POST("/api/v1/signup", controllers.SignUpClient)
 
 	//Image Upload API routes
-	router.POST("/api/v1/image", controllers.UploadImage)
+	router.POST("/api/v1/image", middlewares.AuthRequired(), controllers.UploadImageClient)
 
 }
