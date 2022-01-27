@@ -15,11 +15,11 @@ func ReportValidationFailure(err error, c *gin.Context) bool {
 		return false
 	}
 	var validatorErr validator.ValidationErrors
-	var errorMsg string
+	var errorMsg []string
 	//Checking the type of validation error
 	if errors.As(err, &validatorErr) {
 		for _, error := range validatorErr {
-			errorMsg += error.Field() + " : " + MsgForTag(error.Tag()) + "; "
+			errorMsg = append(errorMsg, error.Field()+" : "+MsgForTag(error.Tag()))
 		}
 		//Sending the error response
 		c.JSON(http.StatusBadRequest, gin.H{
