@@ -6,12 +6,15 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/resources"
 	"github.com/mkrs2404/eKYC/auth"
+	"github.com/mkrs2404/eKYC/database"
 	"github.com/mkrs2404/eKYC/helper"
 	"github.com/mkrs2404/eKYC/messages"
 )
 
+//AuthRequired is the middleware to authenticate the JWT token supplied in the header
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var header resources.AuthHeader
@@ -31,7 +34,8 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		clientEmail, err := auth.ValidateToken(tokenString)
+		//Validating if the JWT token provided is authentic
+		clientId, err := auth.ValidateToken(tokenString)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"errorMsg": err.Error(),
@@ -40,11 +44,15 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("client", clientEmail)
+		//Setting the client object to the context for the next http.handler, when the token is authentic
+		var client models.Client
+		database.DB.First(&client, clientId)
+		c.Set("client", client)
 		c.Next()
 	}
 }
 
+//extractToken extracts the JWT token from the Authorization header
 func extractToken(header resources.AuthHeader) (string, error) {
 	jwtToken := strings.Split(header.JWTToken, "Bearer ")
 	var err error

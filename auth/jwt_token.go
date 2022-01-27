@@ -12,7 +12,7 @@ import (
 )
 
 //GenerateToken generates a JWT key with the user Id in the payload
-func GenerateToken(email string) (string, error) {
+func GenerateToken(clientId uint) (string, error) {
 
 	//Fetching the JWT token delay from env variables
 	tokenExpiryDelay := os.Getenv("TOKEN_EXPIRY_DELAY")
@@ -30,7 +30,7 @@ func GenerateToken(email string) (string, error) {
 		log.Fatal("Secret Key not found")
 	}
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer: email,
+		Issuer: strconv.Itoa(int(clientId)),
 		ExpiresAt: &jwt.Time{
 			Time: time.Now().Add(time.Hour * time.Duration(expiryDelay)),
 		},
@@ -41,8 +41,8 @@ func GenerateToken(email string) (string, error) {
 	return token, err
 }
 
-//ValidateToken takes the tokenString from the request and validates if it is authentic. If yes, clientId is returned, else, unauthorized error is returned
-func ValidateToken(tokenString string) (string, error) {
+//ValidateToken takes the tokenString from the request and validates if it is authentic. If yes, client object is returned, else, 'unauthorized' error is returned
+func ValidateToken(tokenString string) (int, error) {
 	secretKey := os.Getenv("SECRET_KEY")
 	if len(secretKey) == 0 {
 		log.Fatal("Secret Key not found")
@@ -52,10 +52,10 @@ func ValidateToken(tokenString string) (string, error) {
 		return []byte(secretKey), nil
 	})
 	if err != nil {
-		return "", errors.New(messages.UNAUTHORIZED)
+		return -1, errors.New(messages.UNAUTHORIZED)
 	}
 
 	claims := token.Claims.(*jwt.StandardClaims)
-	clientEmail := claims.Issuer
-	return clientEmail, err
+	clientId, _ := strconv.Atoi(claims.Issuer)
+	return clientId, err
 }
