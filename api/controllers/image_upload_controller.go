@@ -8,21 +8,24 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/minio/minio-go/v7"
+	"github.com/google/uuid"
+	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/resources"
+	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/helper"
 	"github.com/mkrs2404/eKYC/messages"
-	"github.com/mkrs2404/eKYC/minio_client"
 )
 
-const bucketName = "images"
-
+//Handler for /api/v1/image
 func UploadImageClient(c *gin.Context) {
 
-	clientEmail := c.GetString("client")
+	//Getting the client object from previous http.handler
+	clientInterface, _ := c.Get("client")
+	client := clientInterface.(models.Client)
+
+	//Binding the incoming multipart req to the model
 	var uploadImageRequest resources.UploadImageRequest
 	err := c.ShouldBind(&uploadImageRequest)
 	failure := helper.ReportValidationFailure(err, c)
@@ -36,11 +39,12 @@ func UploadImageClient(c *gin.Context) {
 		return
 	}
 
-	fileName, err := saveFile(uploadImageRequest.Image)
-	fmt.Println("filename ", fileName)
+	//Saving the file locally
+	fileName, err := saveFileToDisk(uploadImageRequest.Image)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.FILE_UPLOAD_FAILED,
+			"reason":   messages.DISK_SAVE_FAILED,
 		})
 		c.Abort()
 		return
@@ -48,51 +52,48 @@ func UploadImageClient(c *gin.Context) {
 
 	ctx := context.Background()
 
-	bucketExists, err := minio_client.Minio.BucketExists(ctx, bucketName)
+	//Creating a S3 bucket
+	bucketCreated := services.CreateBucket(ctx, c)
+	if !bucketCreated {
+		return
+	}
+
+	//Uploading the file to minio
+	fileInfo, filePath, err := services.UploadToMinio(client.ID, fileName, uploadImageRequest, ctx, c)
+	if err != nil {
+		return
+	}
+
+	//Saving file's metadata to the database
+	fileUUID, err := services.SaveFile(fileInfo.Bucket, fileInfo.Key, fileInfo.Size, uploadImageRequest.ImageType, client.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.FILE_UPLOAD_FAILED,
+			"reason":   messages.DATABASE_SAVE_FAILED,
 		})
 		c.Abort()
 		return
 	}
-	if !bucketExists {
-		err = minio_client.Minio.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{})
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"errorMsg": messages.FILE_UPLOAD_FAILED,
-			})
-			c.Abort()
-			return
-		}
-	}
-	s3FileName := fmt.Sprintf("%s/%s", clientEmail, fileName)
-	filePath := fmt.Sprintf("./uploads/%s", fileName)
-	_, err = minio_client.Minio.FPutObject(ctx, bucketName, s3FileName, filePath, minio.PutObjectOptions{})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"errorMsg": messages.FILE_UPLOAD_FAILED,
-		})
-		fmt.Println(err)
-		c.Abort()
-		return
-	}
+
+	//Deleting the locally saved file
 	deleteLocalFile(filePath)
 
 	c.JSON(http.StatusOK, gin.H{
-		"msg":         "success",
-		"clientEmail": clientEmail,
+		"id": fileUUID,
 	})
 }
 
-func saveFile(image *multipart.FileHeader) (string, error) {
+//saveFileToDisk saves the uploaded file to the local file system, and returns the saved file's paths
+func saveFileToDisk(image *multipart.FileHeader) (string, error) {
 
 	var err error
 	err = os.MkdirAll("./uploads", os.ModePerm)
 	if err != nil {
 		return "", err
 	}
-	dst, err := os.Create(fmt.Sprintf("./uploads/%d%s", time.Now().Unix(), filepath.Ext(image.Filename)))
+	//Creating a file with name derived from UUID and the file extension
+	fileUUID := uuid.New()
+	dst, err := os.Create(fmt.Sprintf("./uploads/%s%s", fileUUID, filepath.Ext(image.Filename)))
 	if err != nil {
 		return "", err
 	}
@@ -103,6 +104,7 @@ func saveFile(image *multipart.FileHeader) (string, error) {
 	return filepath.Base(dst.Name()), err
 }
 
+//deleteLocalFile deletes the file that was saved locally by saveFileToDisk method
 func deleteLocalFile(filePath string) {
 	os.Remove(filePath)
 }
