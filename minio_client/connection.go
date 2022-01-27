@@ -2,6 +2,7 @@ package minio_client
 
 import (
 	"log"
+	"os"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -11,9 +12,9 @@ import (
 var Minio *minio.Client
 
 func init() {
-	endpoint := "localhost:9099"
-	accessKeyID := "minio"
-	secretAccessKey := "minio123"
+	endpoint := os.Getenv("MINIO_SERVER")
+	accessKeyID := os.Getenv("MINIO_USER")
+	secretAccessKey := os.Getenv("MINIO_PWD")
 	useSSL := false
 
 	// Initialize minio client object.
