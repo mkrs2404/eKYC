@@ -13,25 +13,25 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+var (
+	hostname       = kingpin.Flag("host", "Hostname").String()
+	dbname         = kingpin.Flag("db", "Database name").String()
+	user           = kingpin.Flag("user", "Username").String()
+	password       = kingpin.Flag("pwd", "Password").String()
+	port           = kingpin.Flag("port", "Database port").String()
+	server_address = kingpin.Flag("server", "Server_IP:Port").String()
+	minio_server   = kingpin.Flag("minio_server", "Minio Server_IP:Port").String()
+	minio_pwd      = kingpin.Flag("minio_pwd", "Minio Password").String()
+	minio_user     = kingpin.Flag("minio_user", "Minio user").String()
+)
+
 func init() {
-	var (
-		hostname       = kingpin.Flag("host", "Hostname").Required().String()
-		dbname         = kingpin.Flag("db", "Database name").Required().String()
-		user           = kingpin.Flag("user", "Username").Required().String()
-		password       = kingpin.Flag("pwd", "Password").Required().String()
-		port           = kingpin.Flag("port", "Database port").Required().String()
-		server_address = kingpin.Flag("server", "Server_IP:Port").Required().String()
-	)
 	kingpin.Parse()
-	os.Setenv("DB_HOST", *hostname)
-	os.Setenv("DB_NAME", *dbname)
-	os.Setenv("DB_USER", *user)
-	os.Setenv("DB_PASSWORD", *password)
-	os.Setenv("DB_PORT", *port)
-	os.Setenv("SERVER_ADDR", *server_address)
+	SetEnvVariablesUtil()
 }
 
 func main() {
+
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error fetching the environment values")
