@@ -8,6 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_EXTENSIONS: uuid-ossp
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports: 
@@ -20,6 +21,7 @@ services:
     environment:
       POSTGRES_USER: test_postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_EXTENSIONS: uuid-ossp
     volumes:
       - testpgdata:/var/lib/postgresql/data
     ports: 
