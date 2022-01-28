@@ -49,15 +49,17 @@ var signupTestData = []struct {
 var signUpUrl = "/api/v1/signup"
 
 //Setting up DB connection and data seeding
-func TestMain(t *testing.T) {
+func TestMain(m *testing.M) {
 	err := godotenv.Load("../../.env")
 	if err != nil {
-		log.Fatal("Error fetching the environment values")
-	} else {
-		database.Connect(os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_PORT"), logger.Silent)
-		services.SeedPlanData()
-		database.DB.Exec("DELETE FROM clients")
+		log.Fatalf("Error fetching the environment values")
 	}
+	database.Connect(os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_PORT"), logger.Silent)
+	services.SeedPlanData()
+	database.DB.Exec("DELETE FROM files")
+	database.DB.Exec("DELETE FROM clients")
+	exitVal := m.Run()
+	os.Exit(exitVal)
 }
 
 func TestSignUpClient(t *testing.T) {
@@ -72,9 +74,8 @@ func TestSignUpClient(t *testing.T) {
 		router.ServeHTTP(resRecorder, ctx.Request)
 
 		if resRecorder.Code != data.expectedCode {
-			t.Errorf("Expected %d, Got %d %s", data.expectedCode, resRecorder.Code, resRecorder.Body.String())
+			t.Errorf("Expected %d, Got %d", data.expectedCode, resRecorder.Code)
 		}
-
 	}
 
 }
