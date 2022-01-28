@@ -39,6 +39,17 @@ func UploadImageClient(c *gin.Context) {
 		return
 	}
 
+	//Validating file size and extension
+	err = services.ValidateFile(uploadImageRequest.Image)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errorMsg": messages.FILE_UPLOAD_FAILED,
+			"reason":   err.Error(),
+		})
+		c.Abort()
+		return
+	}
+
 	//Saving the file locally
 	fileName, err := saveFileToDisk(uploadImageRequest.Image)
 	if err != nil {
