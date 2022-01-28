@@ -4,3 +4,4 @@ pgadmin-data
 eKYC.o
 .vscode/launch.json
 .env
+docker-compose.yml
