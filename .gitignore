@@ -5,3 +5,5 @@ eKYC.o
 .env
 docker-compose.yml
 .vscode
+.vscode/launch.json
+docker-compose.yml
