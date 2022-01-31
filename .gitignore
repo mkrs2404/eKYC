@@ -2,6 +2,6 @@ pgdata
 .DS_Store
 pgadmin-data
 eKYC.o
-.vscode/launch.json
 .env
 docker-compose.yml
+.vscode
