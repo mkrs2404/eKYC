@@ -52,7 +52,10 @@ func SignUpClient(c *gin.Context) {
 		c.Abort()
 		return
 	}
+
+	c.Set("access_key", token)
 	c.JSON(http.StatusCreated, gin.H{
 		"access_key": token,
 	})
+
 }
