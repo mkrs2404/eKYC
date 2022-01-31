@@ -16,6 +16,13 @@ func InitializeRoutes(router *gin.Engine) {
 	router.POST("/api/v1/signup", controllers.SignUpClient)
 
 	//Image Upload API routes
-	router.POST("/api/v1/image", middlewares.AuthRequired(), controllers.UploadImageClient)
 
+	routerGroup := router.Group("/api/v1")
+	authRouterGroup := routerGroup.Use(middlewares.AuthRequired())
+	ImageUpload(authRouterGroup)
+
+}
+
+func ImageUpload(r gin.IRoutes) {
+	r.POST("/image", controllers.UploadImageClient)
 }
