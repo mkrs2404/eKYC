@@ -12,6 +12,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
+	"github.com/mkrs2404/eKYC/minio_client"
 	"gorm.io/gorm/logger"
 )
 
@@ -48,7 +49,7 @@ var signupTestData = []struct {
 
 var signUpUrl = "/api/v1/signup"
 
-//Setting up DB connection and data seeding
+//Setting up DB connection, data seeding and Minio connection
 func TestMain(m *testing.M) {
 	err := godotenv.Load("../../.env")
 	if err != nil {
@@ -58,13 +59,17 @@ func TestMain(m *testing.M) {
 	services.SeedPlanData()
 	database.DB.Exec("DELETE FROM files")
 	database.DB.Exec("DELETE FROM clients")
+
+	minio_client.InitializeMinio(os.Getenv("TEST_MINIO_SERVER"), os.Getenv("TEST_MINIO_USER"), os.Getenv("TEST_MINIO_PWD"))
 	exitVal := m.Run()
 	os.Exit(exitVal)
 }
 
 func TestSignUpClient(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	router := gin.New()
+	router := gin.Default()
+
+	router.POST("/api/v1/signup", SignUpClient)
 
 	for _, data := range signupTestData {
 		resRecorder := httptest.NewRecorder()
