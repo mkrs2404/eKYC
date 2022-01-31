@@ -75,6 +75,9 @@ func UploadImageClient(c *gin.Context) {
 		return
 	}
 
+	//Setting the objectName to delete later, if required
+	c.Set("filePath", fmt.Sprintf("%s/%s", services.BucketName, fileInfo.Key))
+
 	//Saving file's metadata to the database
 	fileUUID, err := services.SaveFile(fileInfo.Bucket, fileInfo.Key, fileInfo.Size, uploadImageRequest.ImageType, client.ID)
 	if err != nil {
