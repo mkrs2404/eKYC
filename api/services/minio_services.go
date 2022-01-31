@@ -12,12 +12,12 @@ import (
 	"github.com/mkrs2404/eKYC/minio_client"
 )
 
-const bucketName = "images"
+var BucketName = "images"
 
 func CreateBucket(ctx context.Context, c *gin.Context) bool {
 
 	//Checking if the bucket exists in minio. If not, then creating a bucket
-	bucketExists, err := minio_client.Minio.BucketExists(ctx, bucketName)
+	bucketExists, err := minio_client.Minio.BucketExists(ctx, BucketName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.FILE_UPLOAD_FAILED,
@@ -27,7 +27,7 @@ func CreateBucket(ctx context.Context, c *gin.Context) bool {
 		return false
 	}
 	if !bucketExists {
-		err = minio_client.Minio.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{})
+		err = minio_client.Minio.MakeBucket(ctx, BucketName, minio.MakeBucketOptions{})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"errorMsg": messages.FILE_UPLOAD_FAILED,
@@ -37,6 +37,7 @@ func CreateBucket(ctx context.Context, c *gin.Context) bool {
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -46,8 +47,13 @@ func UploadToMinio(clientId uint, fileName string, uploadImageRequest resources.
 	s3FileName := fmt.Sprintf("%d/%s/%s", clientId, uploadImageRequest.ImageType, fileName)
 	filePath := fmt.Sprintf("./uploads/%s", fileName)
 
+	testBucketName := c.GetString("testBucket")
+	if testBucketName != "" {
+		BucketName = testBucketName
+	}
+
 	//Storing the image in minio
-	fileInfo, err := minio_client.Minio.FPutObject(ctx, bucketName, s3FileName, filePath, minio.PutObjectOptions{})
+	fileInfo, err := minio_client.Minio.FPutObject(ctx, BucketName, s3FileName, filePath, minio.PutObjectOptions{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.FILE_UPLOAD_FAILED,
