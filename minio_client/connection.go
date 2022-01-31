@@ -2,7 +2,6 @@ package minio_client
 
 import (
 	"log"
-	"os"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -11,10 +10,7 @@ import (
 //Global variable to store Minio Client
 var Minio *minio.Client
 
-func init() {
-	endpoint := os.Getenv("MINIO_SERVER")
-	accessKeyID := os.Getenv("MINIO_USER")
-	secretAccessKey := os.Getenv("MINIO_PWD")
+func InitializeMinio(endpoint, accessKeyID, secretAccessKey string) {
 	useSSL := false
 
 	// Initialize minio client object.
