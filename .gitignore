@@ -1,2 +1,6 @@
 pgdata
 .DS_Store
+.vscode
+eKYC.o
+.env
+pgadmin-data
