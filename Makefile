@@ -16,7 +16,7 @@ run:
 
 test:
 	@go clean -testcache
-	go test -v ./api/controllers/...
+	go test -v ./api/controllers/... ./api/middlewares
 	
 clean:
 	@echo "Shutting down docker..."
