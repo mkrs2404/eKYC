@@ -38,6 +38,6 @@ func main() {
 	}
 	database.Connect(os.Getenv("DB_HOST"), os.Getenv("DB_NAME"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), logger.Error)
 	services.SeedPlanData()
-	server.InitializeRouter()
 	minio_client.InitializeMinio(os.Getenv("MINIO_SERVER"), os.Getenv("MINIO_USER"), os.Getenv("MINIO_PWD"))
+	server.InitializeRouter()
 }
