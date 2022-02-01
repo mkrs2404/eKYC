@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/minio/minio-go/v7"
@@ -62,4 +63,14 @@ func UploadToMinio(clientId uint, fileName string, uploadImageRequest resources.
 		c.Abort()
 	}
 	return fileInfo, filePath, err
+}
+
+func DownloadFromMinio(ctx context.Context, objectName string, localFilePath string) error {
+
+	//Object name is like - "images/19/face/17e1de1a-6229-4ffc-8635-03d6ce28de6e.png"
+	//Separating bucketName from objectName
+	bucketName := strings.Split(objectName, "/")[0]
+	objectName = strings.Split(objectName, bucketName+"/")[1]
+	err := minio_client.Minio.FGetObject(ctx, bucketName, objectName, localFilePath, minio.GetObjectOptions{})
+	return err
 }
