@@ -34,6 +34,7 @@ func TestMain(m *testing.M) {
 
 func TestAuthMiddleware(t *testing.T) {
 
+	gin.SetMode(gin.TestMode)
 	res := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(res)
 
