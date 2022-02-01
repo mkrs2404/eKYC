@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"mime/multipart"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -45,4 +46,24 @@ func ValidateFile(file *multipart.FileHeader) error {
 		err = errors.New(messages.WRONG_FILE_SIZE)
 	}
 	return err
+}
+
+func GetFileForClient(imageId string, clientId uint) (models.File, error) {
+
+	var file models.File
+	err := database.DB.Where("id = ? AND client_id = ?", imageId, clientId).First(&file).Error
+	return file, err
+}
+
+func CreateEmptyFile(fileName string) (string, error) {
+
+	os.MkdirAll("./downloads", os.ModePerm)
+	file, err := os.Create(fmt.Sprintf("./downloads/%s", fileName))
+	filePath := file.Name()
+	return filePath, err
+}
+
+//deleteLocalFile deletes the file that was saved locally by saveFileToDisk method
+func DeleteLocalFile(filePath string) {
+	os.Remove(filePath)
 }
