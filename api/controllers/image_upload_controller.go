@@ -64,15 +64,24 @@ func UploadImageClient(c *gin.Context) {
 	ctx := context.Background()
 
 	//Creating a S3 bucket
-	bucketCreated := services.CreateBucket(ctx, c)
-	if !bucketCreated {
-		return
+	err = services.CreateBucket(ctx)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"errorMsg": messages.FILE_UPLOAD_FAILED,
+			"reason":   messages.BUCKET_CREATION_FAILED,
+		})
+		c.Abort()
 	}
 
+	testBucketName := c.GetString("testBucket")
 	//Uploading the file to minio
-	fileInfo, filePath, err := services.UploadToMinio(client.ID, fileName, uploadImageRequest, ctx, c)
+	fileInfo, filePath, err := services.UploadToMinio(client.ID, fileName, uploadImageRequest.ImageType, ctx, testBucketName)
 	if err != nil {
-		return
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"errorMsg": messages.FILE_UPLOAD_FAILED,
+			"reason":   messages.MINIO_UPLOAD_FAILED,
+		})
+		c.Abort()
 	}
 
 	//Setting the objectName to delete later, if required
