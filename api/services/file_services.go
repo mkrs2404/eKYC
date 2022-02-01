@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"mime/multipart"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -45,4 +46,9 @@ func ValidateFile(file *multipart.FileHeader) error {
 		err = errors.New(messages.WRONG_FILE_SIZE)
 	}
 	return err
+}
+
+//DeleteLocalFile deletes the file that was saved locally by saveFileToDisk method
+func DeleteLocalFile(filePath string) {
+	os.Remove(filePath)
 }

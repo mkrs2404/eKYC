@@ -90,7 +90,7 @@ func UploadImageClient(c *gin.Context) {
 	}
 
 	//Deleting the locally saved file
-	deleteLocalFile(filePath)
+	services.DeleteLocalFile(filePath)
 
 	c.JSON(http.StatusOK, gin.H{
 		"id": fileUUID,
@@ -116,9 +116,4 @@ func saveFileToDisk(image *multipart.FileHeader) (string, error) {
 	imageFile, _ := image.Open()
 	_, err = io.Copy(dst, imageFile)
 	return filepath.Base(dst.Name()), err
-}
-
-//deleteLocalFile deletes the file that was saved locally by saveFileToDisk method
-func deleteLocalFile(filePath string) {
-	os.Remove(filePath)
 }
