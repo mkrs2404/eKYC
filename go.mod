@@ -53,6 +53,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/postgres v1.2.3 // indirect
 	gorm.io/driver/sqlite v1.2.6 // indirect
+	syreclabs.com/go/faker v1.2.3 // indirect
 )
 
 require (
