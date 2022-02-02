@@ -2,12 +2,17 @@ package services
 
 import (
 	"errors"
+	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgconn"
 	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/resources"
+	"github.com/mkrs2404/eKYC/auth"
 	"github.com/mkrs2404/eKYC/database"
 )
+
+const signUpUrl = "/api/v1/signup"
 
 /*SaveClient saves the client to the DB and returns back the client and an error(if there's email duplicacy)*/
 func SaveClient(signUpRequest resources.SignUpRequest) (models.Client, error) {
@@ -26,4 +31,25 @@ func SaveClient(signUpRequest resources.SignUpRequest) (models.Client, error) {
 		}
 	}
 	return client, err
+}
+
+//SetupClient creates a client in DB and returns the Auth header
+func SetupClient(ctx *gin.Context) (string, models.Client, error) {
+
+	dummyClient := resources.SignUpRequest{
+		Name:  "bob",
+		Email: "bob@one2n.in",
+		Plan:  "basic",
+	}
+
+	client, err := SaveClient(dummyClient)
+	if err != nil {
+		return "", client, err
+	}
+
+	token, err := auth.GenerateToken(client.ID)
+	//Creating the auth header
+	token = fmt.Sprintf("Bearer %s", token)
+
+	return token, client, err
 }

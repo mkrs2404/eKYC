@@ -16,6 +16,8 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+const signUpUrl = "/api/v1/signup"
+
 var signupTestData = []struct {
 	expectedCode int
 	body         string

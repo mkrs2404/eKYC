@@ -1,10 +1,7 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
-	"net/http/httptest"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/api/models"
@@ -15,8 +12,6 @@ import (
 	"github.com/mkrs2404/eKYC/helper"
 	"github.com/mkrs2404/eKYC/messages"
 )
-
-const signUpUrl = "/api/v1/signup"
 
 //Handler for /api/v1/signup
 func SignUpClient(c *gin.Context) {
@@ -63,29 +58,4 @@ func SignUpClient(c *gin.Context) {
 		"access_key": token,
 	})
 
-}
-
-//SetupClient creates a client in DB and returns the Auth header for Image upload tests
-func SetupClient(ctx *gin.Context) (string, error) {
-
-	gin.SetMode(gin.TestMode)
-	router := gin.New()
-
-	router.POST(signUpUrl, SignUpClient)
-	signUpRes := httptest.NewRecorder()
-	signUpCtx, _ := gin.CreateTestContext(signUpRes)
-	signUpCtx.Request, _ = http.NewRequest(http.MethodPost, signUpUrl, strings.NewReader(`{"name": "bob","email": "bob@one2.in","plan": "basic"}`))
-
-	SignUpClient(signUpCtx)
-
-	router.ServeHTTP(signUpRes, signUpCtx.Request)
-
-	var client models.Client
-	err := database.DB.Where("email = ?", "bob@one2.in").First(&client).Error
-	ctx.Set("client", client)
-
-	//Creating the auth header
-	token := fmt.Sprintf("Bearer %s", signUpCtx.GetString("access_key"))
-
-	return token, err
 }
