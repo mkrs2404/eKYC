@@ -13,9 +13,9 @@ import (
 	"github.com/mkrs2404/eKYC/messages"
 )
 
-const apiType = "face-match"
-
 func FaceMatchClient(c *gin.Context) {
+
+	const apiType = "face-match"
 
 	//Getting the client object from previous http.handler
 	clientInterface, _ := c.Get("client")
