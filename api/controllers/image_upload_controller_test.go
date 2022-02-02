@@ -3,7 +3,6 @@ package controllers
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -16,7 +15,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/minio/minio-go/v7"
 	"github.com/mkrs2404/eKYC/api/middlewares"
-	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
 	"github.com/mkrs2404/eKYC/minio_client"
@@ -84,7 +82,7 @@ const imageUploadUrl = "/api/v1/image"
 
 func TestImageUploadClient(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	router := gin.Default()
+	router := gin.New()
 
 	router.POST(imageUploadUrl, middlewares.AuthRequired(), UploadImageClient)
 
@@ -101,7 +99,7 @@ func TestImageUploadClient(t *testing.T) {
 		ctx.Request, _ = http.NewRequest(http.MethodPost, imageUploadUrl, body)
 		ctx.Request.Header.Set("Content-Type", multiWriter.FormDataContentType())
 
-		token, err := setupClient(ctx)
+		token, err := SetupClient(ctx)
 		if err != nil {
 			t.Fatal("Error setting up the client")
 		}
@@ -149,7 +147,7 @@ func TestAuthMiddleware(t *testing.T) {
 		body := ""
 		ctx.Request, _ = http.NewRequest(http.MethodPost, imageUploadUrl, strings.NewReader(body))
 
-		token, err := setupClient(ctx)
+		token, err := SetupClient(ctx)
 		if err != nil {
 			t.Fatal("Error setting up the client")
 		}
@@ -197,29 +195,4 @@ func createMultipartPayload(filePath, imageType string) (*multipart.Writer, *byt
 	multiWriter.Close()
 
 	return multiWriter, body, err
-}
-
-//setupClient creates a client in DB and returns the Auth header for Image upload tests
-func setupClient(ctx *gin.Context) (string, error) {
-
-	gin.SetMode(gin.TestMode)
-	router := gin.New()
-
-	router.POST(signUpUrl, SignUpClient)
-	signUpRes := httptest.NewRecorder()
-	signUpCtx, _ := gin.CreateTestContext(signUpRes)
-	signUpCtx.Request, _ = http.NewRequest(http.MethodPost, signUpUrl, strings.NewReader(`{"name": "bob","email": "bob@one2.in","plan": "basic"}`))
-
-	SignUpClient(signUpCtx)
-
-	router.ServeHTTP(signUpRes, signUpCtx.Request)
-
-	var client models.Client
-	err := database.DB.Where("email = ?", "bob@one2.in").First(&client).Error
-	ctx.Set("client", client)
-
-	//Creating the auth header
-	token := fmt.Sprintf("Bearer %s", signUpCtx.GetString("access_key"))
-
-	return token, err
 }
