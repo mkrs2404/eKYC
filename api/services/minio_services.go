@@ -24,11 +24,10 @@ func CreateBucket(ctx context.Context) error {
 	return err
 }
 
-func UploadToMinio(clientId uint, fileName string, imageType string, ctx context.Context, testBucketName string) (minio.UploadInfo, string, error) {
+func UploadToMinio(clientId uint, fileName string, imageType string, filePath string, ctx context.Context, testBucketName string) (minio.UploadInfo, error) {
 
 	//Creating folder structure for s3 bucket as bucketName -> 12 -> face -> fileName
 	s3FileName := fmt.Sprintf("%d/%s/%s", clientId, imageType, fileName)
-	filePath := fmt.Sprintf("./uploads/%s", fileName)
 
 	if testBucketName != "" {
 		BucketName = testBucketName
@@ -36,7 +35,7 @@ func UploadToMinio(clientId uint, fileName string, imageType string, ctx context
 
 	//Storing the image in minio
 	fileInfo, err := minio_client.Minio.FPutObject(ctx, BucketName, s3FileName, filePath, minio.PutObjectOptions{})
-	return fileInfo, filePath, err
+	return fileInfo, err
 }
 
 //DownloadFromMinio downloads the file from minio and stores it locally

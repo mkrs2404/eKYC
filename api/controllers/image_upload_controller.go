@@ -74,8 +74,12 @@ func UploadImageClient(c *gin.Context) {
 	}
 
 	testBucketName := c.GetString("testBucket")
+
+	//path of the file to be uploaded
+	filePath := fmt.Sprintf("./uploads/%s", fileName)
+
 	//Uploading the file to minio
-	fileInfo, filePath, err := services.UploadToMinio(client.ID, fileName, uploadImageRequest.ImageType, ctx, testBucketName)
+	fileInfo, err := services.UploadToMinio(client.ID, fileName, uploadImageRequest.ImageType, filePath, ctx, testBucketName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.FILE_UPLOAD_FAILED,
