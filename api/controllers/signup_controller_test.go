@@ -47,8 +47,6 @@ var signupTestData = []struct {
 	},
 }
 
-var signUpUrl = "/api/v1/signup"
-
 //Setting up DB connection, data seeding and Minio connection
 func TestMain(m *testing.M) {
 	err := godotenv.Load("../../.env")
