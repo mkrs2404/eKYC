@@ -15,15 +15,16 @@ func InitializeRoutes(router *gin.Engine) {
 	//Signup API routes
 	router.POST("/api/v1/signup", controllers.SignUpClient)
 
-	//Image Upload API routes
-
 	routerGroup := router.Group("/api/v1")
 	authRouterGroup := routerGroup.Use(middlewares.AuthRequired())
 	ImageAPI(authRouterGroup)
-
+	MatchAPI(authRouterGroup)
 }
 
 func ImageAPI(r gin.IRoutes) {
 	r.POST("/image", controllers.UploadImageClient)
+}
+
+func MatchAPI(r gin.IRoutes) {
 	r.POST("/face-match", controllers.FaceMatchClient)
 }
