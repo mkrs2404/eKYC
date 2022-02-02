@@ -19,6 +19,7 @@ func InitializeRoutes(router *gin.Engine) {
 	authRouterGroup := routerGroup.Use(middlewares.AuthRequired())
 	ImageAPI(authRouterGroup)
 	MatchAPI(authRouterGroup)
+	OcrAPI(authRouterGroup)
 }
 
 func ImageAPI(r gin.IRoutes) {
@@ -27,4 +28,8 @@ func ImageAPI(r gin.IRoutes) {
 
 func MatchAPI(r gin.IRoutes) {
 	r.POST("/face-match", controllers.FaceMatchClient)
+}
+
+func OcrAPI(r gin.IRoutes) {
+	r.POST("/ocr", controllers.OcrClient)
 }
