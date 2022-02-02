@@ -13,7 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/minio/minio-go/v7"
 	"github.com/mkrs2404/eKYC/api/middlewares"
-	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
 	"github.com/mkrs2404/eKYC/minio_client"
@@ -32,6 +31,11 @@ var faceMatchTestData = []struct {
 		body:         `{"image1":"abcd", "image2":"defg"}`,
 		expectedCode: 400,
 	},
+	//Missing UUID
+	{
+		body:         `{"image1":"", "image2":"defg"}`,
+		expectedCode: 400,
+	},
 }
 
 const faceMatchUrl = "/api/v1/face-match"
@@ -46,14 +50,11 @@ func TestFaceMatchClient(t *testing.T) {
 		resRecorder := httptest.NewRecorder()
 		ctx, _ := gin.CreateTestContext(resRecorder)
 
-		token, err := SetupClient(ctx)
+		token, client, err := services.SetupClient(ctx)
 		if err != nil {
 			t.Fatal("Error setting up the client")
 		}
-
-		//Getting the client object set in SetupClient()
-		clientInterface, _ := ctx.Get("client")
-		client := clientInterface.(models.Client)
+		ctx.Set("client", client)
 
 		filePath1 := "../../test_assets/db5ed785-e54e-4ffb-9ed5-0653aea87217.png"
 		fileName1 := filepath.Base(filePath1)
@@ -90,7 +91,7 @@ func TestFaceMatchClient(t *testing.T) {
 		if resRecorder.Code != data.expectedCode {
 			t.Errorf("Expected %d, Got %d ", data.expectedCode, resRecorder.Code)
 		}
-		fmt.Println(resRecorder.Body)
+
 		//Clearing up test DB
 		database.DB.Exec("DELETE FROM api_calls")
 		database.DB.Exec("DELETE FROM files")

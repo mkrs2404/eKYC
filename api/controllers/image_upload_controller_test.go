@@ -99,10 +99,12 @@ func TestImageUploadClient(t *testing.T) {
 		ctx.Request, _ = http.NewRequest(http.MethodPost, imageUploadUrl, body)
 		ctx.Request.Header.Set("Content-Type", multiWriter.FormDataContentType())
 
-		token, err := SetupClient(ctx)
+		token, client, err := services.SetupClient(ctx)
 		if err != nil {
 			t.Fatal("Error setting up the client")
 		}
+		ctx.Set("client", client)
+
 		//Setting the authorization token
 		ctx.Request.Header.Set("Authorization", token)
 
@@ -132,40 +134,6 @@ func TestImageUploadClient(t *testing.T) {
 
 	//Removing the uploaded files
 	os.Remove("./uploads")
-}
-
-func TestAuthMiddleware(t *testing.T) {
-	gin.SetMode(gin.TestMode)
-	router := gin.Default()
-
-	router.POST(imageUploadUrl, middlewares.AuthRequired(), UploadImageClient)
-
-	for _, data := range middlewareTestData {
-
-		resRecorder := httptest.NewRecorder()
-		ctx, _ := gin.CreateTestContext(resRecorder)
-		body := ""
-		ctx.Request, _ = http.NewRequest(http.MethodPost, imageUploadUrl, strings.NewReader(body))
-
-		token, err := SetupClient(ctx)
-		if err != nil {
-			t.Fatal("Error setting up the client")
-		}
-
-		if data.token == "" {
-			ctx.Request.Header.Set("Authorization", "")
-		} else {
-			ctx.Request.Header.Set("Authorization", token+data.token)
-		}
-
-		router.ServeHTTP(resRecorder, ctx.Request)
-
-		if resRecorder.Code != data.expectedCode {
-			t.Errorf("Expected %d, Got %d ", data.expectedCode, resRecorder.Code)
-		}
-		database.DB.Exec("DELETE FROM clients")
-	}
-
 }
 
 //createMultipartPayload takes the local filepath and imagetype and generates a Multipart paylaod
