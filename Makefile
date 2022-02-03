@@ -12,7 +12,7 @@ run:
 	@echo "Starting up docker..."
 	@docker-compose up -d --remove-orphans
 	make build
-	@./eKYC.o --host=$(host) --db=$(db) --user=$(user) --pwd=$(pwd) --port=$(port) --server=$(server) --minio_server=$(minio_server) --minio_pwd=$(minio_pwd) --minio_user=$(minio_user)
+	@./eKYC.o --host=$(host) --db=$(db) --user=$(user) --pwd=$(pwd) --port=$(port) --server=$(server) --minio_server=$(minio_server) --minio_pwd=$(minio_pwd) --minio_user=$(minio_user) --redis_server=$(redis_server) --redis_pwd=$(redis_pwd)
 
 test:
 	@go clean -testcache

@@ -23,6 +23,8 @@ var (
 	minio_server   = kingpin.Flag("minio_server", "Minio Server_IP:Port").String()
 	minio_pwd      = kingpin.Flag("minio_pwd", "Minio Password").String()
 	minio_user     = kingpin.Flag("minio_user", "Minio user").String()
+	redis_addr     = kingpin.Flag("redis_server", "Redis Server_IP:Port").String()
+	redis_pwd      = kingpin.Flag("redis_pwd", "Redis Password").String()
 )
 
 func init() {

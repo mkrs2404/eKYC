@@ -15,6 +15,8 @@ func SetEnvVariablesUtil() {
 	setEnvVariables("MINIO_SERVER", *minio_server)
 	setEnvVariables("MINIO_USER", *minio_user)
 	setEnvVariables("MINIO_PWD", *minio_pwd)
+	setEnvVariables("REDIS_SERVER", *redis_addr)
+	setEnvVariables("REDIS_PASSWORD", *redis_pwd)
 }
 
 func setEnvVariables(key, value string) {
