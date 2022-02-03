@@ -42,13 +42,11 @@ func OcrClient(c *gin.Context) {
 
 	//If image is not an id card
 	if file.FileType != "id_card" {
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"errorMsg": messages.NOT_AN_ID_CARD,
-			})
-			c.Abort()
-			return
-		}
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errorMsg": messages.NOT_AN_ID_CARD,
+		})
+		c.Abort()
+		return
 	}
 
 	//Adding fake data
