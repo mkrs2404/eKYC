@@ -4,6 +4,7 @@ import (
 	"context"
 	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/api/models"
@@ -54,11 +55,12 @@ func FaceMatchClient(c *gin.Context) {
 		return
 	}
 
+	rand.Seed(time.Now().UnixNano())
 	//Random score generation between 0-100
 	faceMatchScore := rand.Intn(101)
 
 	//Saving the api call info into the DB
-	err = services.SaveApiCall(faceMatchScore, apiType, client.ID)
+	_, err = services.SaveApiCall(faceMatchScore, apiType, client.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.DATABASE_SAVE_FAILED,

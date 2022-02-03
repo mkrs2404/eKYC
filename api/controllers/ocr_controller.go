@@ -59,7 +59,7 @@ func OcrClient(c *gin.Context) {
 	pincode := faker.Address().Postcode()
 
 	//Saving the api call info into the DB
-	err = services.SaveApiCall(-1, apiType, client.ID)
+	_, err = services.SaveApiCall(-1, apiType, client.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.DATABASE_SAVE_FAILED,
