@@ -4,6 +4,7 @@ import (
 	"context"
 	"math/rand"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/api/models"
@@ -74,4 +75,5 @@ func FaceMatchClient(c *gin.Context) {
 	//Deleting the downloaded files from minio
 	services.DeleteLocalFile(filePath1)
 	services.DeleteLocalFile(filePath2)
+	os.Remove("./downloads")
 }
