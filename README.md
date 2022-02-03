@@ -38,7 +38,7 @@ Run following commands in the root directory:
 - Run
 
 ```
-make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> server=<IP:Port> minio_server=<IP:Port> minio_pwd=<minio_pwd> minio_user=<minio_user> run
+make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> server=<IP:Port> minio_server=<IP:Port> minio_pwd=<minio_pwd> minio_user=<minio_user> redis_server=<IP:Port> redis_pwd= <redis_pwd> run
 ```
 
 - Test
@@ -74,6 +74,10 @@ TOKEN_EXPIRY_DELAY=
 MINIO_SERVER=
 MINIO_USER=
 MINIO_PWD=
+
+#Redis
+REDIS_SERVER=
+REDIS_PASSWORD=
 
 #Test Environment
 TEST_DB_HOST=
