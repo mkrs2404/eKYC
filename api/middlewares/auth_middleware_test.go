@@ -37,7 +37,7 @@ func TestAuthMiddleware(t *testing.T) {
 	res := httptest.NewRecorder()
 	ctx, _ := gin.CreateTestContext(res)
 
-	token, client, err := services.SetupClient(ctx)
+	token, client, err := services.SetupClient()
 	if err != nil {
 		t.Fatal("Client setup failed")
 	}

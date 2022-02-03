@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgconn"
 	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/resources"
@@ -34,7 +33,7 @@ func SaveClient(signUpRequest resources.SignUpRequest) (models.Client, error) {
 }
 
 //SetupClient creates a client in DB and returns the Auth header
-func SetupClient(ctx *gin.Context) (string, models.Client, error) {
+func SetupClient() (string, models.Client, error) {
 
 	dummyClient := resources.SignUpRequest{
 		Name:  "bob",

@@ -50,7 +50,7 @@ func TestFaceMatchClient(t *testing.T) {
 		resRecorder := httptest.NewRecorder()
 		ctx, _ := gin.CreateTestContext(resRecorder)
 
-		token, client, err := services.SetupClient(ctx)
+		token, client, err := services.SetupClient()
 		if err != nil {
 			t.Fatal("Error setting up the client")
 		}

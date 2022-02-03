@@ -20,21 +20,6 @@ import (
 	"github.com/mkrs2404/eKYC/minio_client"
 )
 
-var middlewareTestData = []struct {
-	token        string
-	expectedCode int
-}{
-	//Empty Authorization header
-	{
-		token:        "",
-		expectedCode: http.StatusBadRequest,
-	},
-	//Incorrect Token
-	{
-		token:        "k",
-		expectedCode: http.StatusUnauthorized,
-	},
-}
 var imageUploadTestData = []struct {
 	filePath     string
 	imageType    string
@@ -99,7 +84,7 @@ func TestImageUploadClient(t *testing.T) {
 		ctx.Request, _ = http.NewRequest(http.MethodPost, imageUploadUrl, body)
 		ctx.Request.Header.Set("Content-Type", multiWriter.FormDataContentType())
 
-		token, client, err := services.SetupClient(ctx)
+		token, client, err := services.SetupClient()
 		if err != nil {
 			t.Fatal("Error setting up the client")
 		}
