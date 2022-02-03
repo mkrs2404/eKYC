@@ -38,18 +38,14 @@ func UploadToMinio(clientId uint, fileName string, imageType string, filePath st
 	return fileInfo, err
 }
 
-//DownloadFromMinio downloads the file from minio and stores it locally
-func DownloadFromMinio(ctx context.Context, objectName string, fileName string) (string, error) {
+//DownloadFromMinio downloads the file from minio and returns *minio.Object
+func DownloadFromMinio(ctx context.Context, objectName string, fileName string) (*minio.Object, error) {
 
-	//Creating an empty file to write the contents downloaded from minio
-	localFilePath, err := CreateEmptyFile(fileName)
-	if err != nil {
-		return localFilePath, err
-	}
 	//Object name is like - "images/19/face/17e1de1a-6229-4ffc-8635-03d6ce28de6e.png"
 	//Separating bucketName from objectName
 	bucketName := strings.Split(objectName, "/")[0]
 	objectName = strings.Split(objectName, bucketName+"/")[1]
-	err = minio_client.Minio.FGetObject(ctx, bucketName, objectName, localFilePath, minio.GetObjectOptions{})
-	return localFilePath, err
+	obj, err := minio_client.Minio.GetObject(ctx, bucketName, objectName, minio.GetObjectOptions{})
+	return obj, err
+
 }

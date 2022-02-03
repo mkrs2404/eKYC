@@ -4,7 +4,6 @@ import (
 	"context"
 	"math/rand"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/api/models"
@@ -44,8 +43,8 @@ func FaceMatchClient(c *gin.Context) {
 	ctx := context.Background()
 
 	//Downloading the files from minio
-	filePath1, err1 := services.DownloadFromMinio(ctx, file1.FileStoragePath, file1.FileName)
-	filePath2, err2 := services.DownloadFromMinio(ctx, file2.FileStoragePath, file2.FileName)
+	_, err1 = services.DownloadFromMinio(ctx, file1.FileStoragePath, file1.FileName)
+	_, err2 = services.DownloadFromMinio(ctx, file2.FileStoragePath, file2.FileName)
 
 	if err1 != nil && err2 != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -71,9 +70,4 @@ func FaceMatchClient(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"score": faceMatchScore,
 	})
-
-	//Deleting the downloaded files from minio
-	services.DeleteLocalFile(filePath1)
-	services.DeleteLocalFile(filePath2)
-	os.Remove("./downloads")
 }
