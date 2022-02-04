@@ -71,7 +71,7 @@ func AsyncFaceMatchClient(c *gin.Context) {
 	go faceMatchWorker(apiCall)
 
 	c.JSON(http.StatusOK, gin.H{
-		"match_id": apiCall.ID,
+		"job_id": apiCall.ID,
 	})
 
 }
