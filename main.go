@@ -8,6 +8,7 @@ import (
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
 	"github.com/mkrs2404/eKYC/minio_client"
+	"github.com/mkrs2404/eKYC/redis_client"
 	"github.com/mkrs2404/eKYC/server"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"gorm.io/gorm/logger"
@@ -41,5 +42,6 @@ func main() {
 	database.Connect(os.Getenv("DB_HOST"), os.Getenv("DB_NAME"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), logger.Error)
 	services.SeedPlanData()
 	minio_client.InitializeMinio(os.Getenv("MINIO_SERVER"), os.Getenv("MINIO_USER"), os.Getenv("MINIO_PWD"))
+	redis_client.InitializeRedis(os.Getenv("REDIS_SERVER"), os.Getenv("REDIS_PASSWORD"))
 	server.InitializeRouter()
 }
