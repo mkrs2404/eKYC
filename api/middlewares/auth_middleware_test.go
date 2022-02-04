@@ -54,4 +54,5 @@ func TestAuthMiddleware(t *testing.T) {
 		t.Errorf("Expected %v, Got %v", client, authenticatedClient)
 	}
 
+	database.DB.Exec("DELETE FROM clients")
 }
