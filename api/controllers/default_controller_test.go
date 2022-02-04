@@ -36,12 +36,12 @@ func TestWelcomeController(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.New()
 
+	router.GET("/", WelcomePage)
 	for _, data := range welcomeTestData {
 		resRecorder := httptest.NewRecorder()
 		ctx, _ := gin.CreateTestContext(resRecorder)
 		ctx.Request, _ = http.NewRequest(http.MethodGet, data.testURL, nil)
 		WelcomePage(ctx)
-		router.ServeHTTP(resRecorder, ctx.Request)
 		if resRecorder.Code != data.expectedCode {
 			t.Errorf("Expected %d, Got %d", data.expectedCode, resRecorder.Code)
 		}
@@ -51,13 +51,12 @@ func TestWelcomeController(t *testing.T) {
 func TestNoRouteController(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.New()
-
+	router.NoRoute(NoRoute)
 	for _, data := range noRouteTestdata {
 		resRecorder := httptest.NewRecorder()
 		ctx, _ := gin.CreateTestContext(resRecorder)
 		ctx.Request, _ = http.NewRequest(http.MethodGet, data.testURL, nil)
 		NoRoute(ctx)
-		router.ServeHTTP(resRecorder, ctx.Request)
 		if resRecorder.Code != data.expectedCode {
 			t.Errorf("Expected %d, Got %d", data.expectedCode, resRecorder.Code)
 		}

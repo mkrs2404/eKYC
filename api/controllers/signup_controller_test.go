@@ -76,7 +76,6 @@ func TestSignUpClient(t *testing.T) {
 		ctx, _ := gin.CreateTestContext(resRecorder)
 		ctx.Request, _ = http.NewRequest(http.MethodPost, signUpUrl, strings.NewReader(data.body))
 		SignUpClient(ctx)
-		router.ServeHTTP(resRecorder, ctx.Request)
 
 		if resRecorder.Code != data.expectedCode {
 			t.Errorf("Expected %d, Got %d", data.expectedCode, resRecorder.Code)

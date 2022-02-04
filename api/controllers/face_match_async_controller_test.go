@@ -89,7 +89,6 @@ func TestAsyncFaceMatchClient(t *testing.T) {
 		ctx.Request.Header.Set("Authorization", token)
 		AsyncFaceMatchClient(ctx)
 
-		router.ServeHTTP(resRecorder, ctx.Request)
 		if resRecorder.Code != data.expectedCode {
 			t.Errorf("Expected %d, Got %d ", data.expectedCode, resRecorder.Code)
 		}

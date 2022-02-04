@@ -101,7 +101,6 @@ func TestOcrClient(t *testing.T) {
 		ctx.Request.Header.Set("Authorization", token)
 		OcrClient(ctx)
 
-		router.ServeHTTP(resRecorder, ctx.Request)
 		if resRecorder.Code != data.expectedCode {
 			t.Errorf("Expected %d %s, Got %d %s", data.expectedCode, ctx.Request.Body, resRecorder.Code, resRecorder.Body)
 		}

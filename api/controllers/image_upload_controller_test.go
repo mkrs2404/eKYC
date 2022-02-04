@@ -9,7 +9,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -97,8 +96,6 @@ func TestImageUploadClient(t *testing.T) {
 		ctx.Set("testBucket", "test")
 		UploadImageClient(ctx)
 
-		router.ServeHTTP(resRecorder, ctx.Request)
-
 		if resRecorder.Code != data.expectedCode {
 			t.Errorf("Expected %d, Got %d ", data.expectedCode, resRecorder.Code)
 		}
@@ -108,10 +105,6 @@ func TestImageUploadClient(t *testing.T) {
 		database.DB.Exec("DELETE FROM clients")
 
 		objectName := ctx.GetString("filePath")
-		//Removing the bucket name from the filePath
-		if objectName != "" {
-			objectName = strings.Split(objectName, services.BucketName+"/")[1]
-		}
 
 		//Deleting the test images uploaded to minio
 		minio_client.Minio.RemoveObject(context.Background(), services.BucketName, objectName, minio.RemoveObjectOptions{})
