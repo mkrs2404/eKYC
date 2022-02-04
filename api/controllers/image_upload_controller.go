@@ -62,9 +62,10 @@ func UploadImageClient(c *gin.Context) {
 	}
 
 	ctx := context.Background()
+	testBucketName := c.GetString("testBucket")
 
 	//Creating a S3 bucket
-	err = services.CreateBucket(ctx)
+	err = services.CreateBucket(ctx, testBucketName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.FILE_UPLOAD_FAILED,
@@ -72,8 +73,6 @@ func UploadImageClient(c *gin.Context) {
 		})
 		c.Abort()
 	}
-
-	testBucketName := c.GetString("testBucket")
 
 	//path of the file to be uploaded
 	filePath := fmt.Sprintf("./uploads/%s", fileName)
@@ -89,7 +88,7 @@ func UploadImageClient(c *gin.Context) {
 	}
 
 	//Setting the objectName to delete later, if required
-	c.Set("filePath", fmt.Sprintf("%s/%s", services.BucketName, fileInfo.Key))
+	c.Set("filePath", fileInfo.Key)
 
 	//Saving file's metadata to the database
 	fileUUID, err := services.SaveFile(fileInfo.Bucket, fileInfo.Key, fileInfo.Size, uploadImageRequest.ImageType, client.ID)
