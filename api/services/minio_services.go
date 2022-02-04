@@ -11,7 +11,11 @@ import (
 
 var BucketName = "images"
 
-func CreateBucket(ctx context.Context) error {
+func CreateBucket(ctx context.Context, testBucketName string) error {
+
+	if testBucketName != "" {
+		BucketName = testBucketName
+	}
 
 	//Checking if the bucket exists in minio. If not, then creating a bucket
 	bucketExists, err := minio_client.Minio.BucketExists(ctx, BucketName)
