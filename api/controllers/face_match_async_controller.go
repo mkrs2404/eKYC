@@ -5,12 +5,10 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
 	"github.com/mkrs2404/eKYC/api/models"
 	"github.com/mkrs2404/eKYC/api/resources"
 	"github.com/mkrs2404/eKYC/api/services"
@@ -69,11 +67,8 @@ func AsyncFaceMatchClient(c *gin.Context) {
 		return
 	}
 
-	redis := redis.NewClient(&redis.Options{
-		Addr: os.Getenv("REDIS_SERVER"),
-	})
-
-	go faceMatchWorker(apiCall, redis)
+	//goroutine mimicking ML workload
+	go faceMatchWorker(apiCall)
 
 	c.JSON(http.StatusOK, gin.H{
 		"match_id": apiCall.ID,
@@ -103,12 +98,8 @@ func GetFaceMatchScore(c *gin.Context) {
 		return
 	}
 
-	redis := redis.NewClient(&redis.Options{
-		Addr: os.Getenv("REDIS_SERVER"),
-	})
-
 	key := strconv.Itoa(faceMatchScore.MatchId)
-	score, err := redis.Get(context.Background(), key).Result()
+	score, err := services.GetFromRedis(key)
 
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -124,7 +115,7 @@ func GetFaceMatchScore(c *gin.Context) {
 
 }
 
-func faceMatchWorker(apiCall models.Api_Calls, redis *redis.Client) {
+func faceMatchWorker(apiCall models.Api_Calls) {
 
 	//Simulating ML workload
 	time.Sleep(10 * time.Second)
@@ -139,7 +130,8 @@ func faceMatchWorker(apiCall models.Api_Calls, redis *redis.Client) {
 		log.Fatal(err)
 	}
 
-	err = redis.Set(context.Background(), strconv.Itoa(int(apiCall.ID)), faceMatchScore, time.Hour).Err()
+	//Setting the score in Redis
+	err = services.SetToRedis(strconv.Itoa(int(apiCall.ID)), faceMatchScore, time.Hour)
 	if err != nil {
 		log.Fatal(err)
 	}
