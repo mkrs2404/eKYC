@@ -89,7 +89,7 @@ func GetFaceMatchScore(c *gin.Context) {
 	if failure {
 		return
 	}
-	err = services.ValidateMatchId(faceMatchJob.JobId, int(client.ID))
+	err = services.ValidateJobId(faceMatchJob.JobId, int(client.ID))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errorMsg": messages.INVALID_IMAGE_ID,

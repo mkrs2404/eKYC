@@ -24,9 +24,9 @@ func UpdateApiCall(api_call models.Api_Calls, matchResult int) (models.Api_Calls
 	return api_call, err
 }
 
-func ValidateMatchId(matchId, clientId int) error {
+func ValidateJobId(jobId, clientId int) error {
 
 	var api_call models.Api_Calls
-	err := database.DB.Where("id = ? AND client_id = ?", matchId, clientId).First(&api_call).Error
+	err := database.DB.Where("id = ? AND client_id = ?", jobId, clientId).First(&api_call).Error
 	return err
 }
