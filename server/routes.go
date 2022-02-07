@@ -35,4 +35,6 @@ func MatchAPI(r gin.IRoutes) {
 
 func OcrAPI(r gin.IRoutes) {
 	r.POST("/ocr", controllers.OcrClient)
+	r.POST("/ocr-async", controllers.AsyncOcrClient)
+	r.POST("/get-ocr-data", controllers.GetOcrData)
 }
