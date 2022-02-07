@@ -13,6 +13,7 @@ import (
 	"github.com/mkrs2404/eKYC/api/services"
 	"github.com/mkrs2404/eKYC/database"
 	"github.com/mkrs2404/eKYC/minio_client"
+	"github.com/mkrs2404/eKYC/redis_client"
 	"gorm.io/gorm/logger"
 )
 
@@ -61,6 +62,7 @@ func TestMain(m *testing.M) {
 	database.DB.Exec("DELETE FROM clients")
 
 	minio_client.InitializeMinio(os.Getenv("TEST_MINIO_SERVER"), os.Getenv("TEST_MINIO_USER"), os.Getenv("TEST_MINIO_PWD"))
+	redis_client.InitializeRedis(os.Getenv("REDIS_SERVER"), os.Getenv("REDIS_PASSWORD"))
 	exitVal := m.Run()
 	os.Exit(exitVal)
 }
