@@ -26,6 +26,10 @@ func ReportValidationFailure(err error, c *gin.Context) bool {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errorMsg": errorMsg,
 		})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errorMsg": err.Error(),
+		})
 	}
 	c.Abort()
 	return true
