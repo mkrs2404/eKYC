@@ -83,13 +83,13 @@ func GetFaceMatchScore(c *gin.Context) {
 	client := clientInterface.(models.Client)
 
 	//Binding the request to the model
-	var faceMatchScore resources.FaceMatchScore
-	err := c.ShouldBindJSON(&faceMatchScore)
+	var faceMatchJob resources.JobRequest
+	err := c.ShouldBindJSON(&faceMatchJob)
 	failure := helper.ReportValidationFailure(err, c)
 	if failure {
 		return
 	}
-	err = services.ValidateMatchId(faceMatchScore.MatchId, int(client.ID))
+	err = services.ValidateMatchId(faceMatchJob.JobId, int(client.ID))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errorMsg": messages.INVALID_IMAGE_ID,
@@ -98,7 +98,7 @@ func GetFaceMatchScore(c *gin.Context) {
 		return
 	}
 
-	key := strconv.Itoa(faceMatchScore.MatchId)
+	key := strconv.Itoa(faceMatchJob.JobId)
 	score, err := services.GetFromRedis(key)
 
 	if err != nil {
