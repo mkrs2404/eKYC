@@ -84,5 +84,7 @@ func Clear(objectName1, objectName2 string) {
 
 	//Deleting the test images uploaded to minio
 	minio_client.Minio.RemoveObject(context.Background(), services.BucketName, objectName1, minio.RemoveObjectOptions{})
-	minio_client.Minio.RemoveObject(context.Background(), services.BucketName, objectName2, minio.RemoveObjectOptions{})
+	if objectName2 != "" {
+		minio_client.Minio.RemoveObject(context.Background(), services.BucketName, objectName2, minio.RemoveObjectOptions{})
+	}
 }
