@@ -8,3 +8,6 @@ docker-compose.yml
 .vscode/launch.json
 docker-compose.yml
 redis-data
+monthly_reports/*.csv
+daily_reports/*.csv
+
