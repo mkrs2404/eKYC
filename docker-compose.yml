@@ -3,11 +3,12 @@ version: '3.8'
 services:
   db:
     image: postgres
-    container_name: postgresql
+    container_name:
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_EXTENSIONS: uuid-ossp
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports: 
@@ -15,11 +16,12 @@ services:
 
   test_db:
     image: postgres
-    container_name: test_postgresql
+    container_name:
     restart: always
     environment:
-      POSTGRES_USER: test_postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: 
+      POSTGRES_PASSWORD: 
+      POSTGRES_EXTENSIONS: uuid-ossp
     volumes:
       - testpgdata:/var/lib/postgresql/data
     ports: 
@@ -32,12 +34,37 @@ services:
     ports:
       - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: mohit@one2n.in
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL:
+      PGADMIN_DEFAULT_PASSWORD:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+
+  minio:
+    image: "minio/minio"
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9099:9099"
+    environment:
+      MINIO_ROOT_USER:
+      MINIO_ROOT_PASSWORD:
+    command: server --address ":9099" --console-address ":9000" /data
+    volumes:
+      - "minio_data:/data"
+
+  redis:
+    restart: always
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    
 
 volumes:
   pgdata:
   pgadmin-data:
   testpgdata:
+  minio_data:
+  redis_data:
