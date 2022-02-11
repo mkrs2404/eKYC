@@ -27,6 +27,7 @@ func ImageAPI(r gin.IRoutes) {
 }
 
 func MatchAPI(r gin.IRoutes) {
+	r.Use(middlewares.SaveApi())
 	r.POST("/face-match", controllers.FaceMatchClient)
 	r.POST("/face-match-async", controllers.AsyncFaceMatchClient)
 	r.POST("/get-score", controllers.GetFaceMatchScore)
@@ -34,6 +35,7 @@ func MatchAPI(r gin.IRoutes) {
 }
 
 func OcrAPI(r gin.IRoutes) {
+	r.Use(middlewares.SaveApi())
 	r.POST("/ocr", controllers.OcrClient)
 	r.POST("/ocr-async", controllers.AsyncOcrClient)
 	r.POST("/get-ocr-data", controllers.GetOcrData)
