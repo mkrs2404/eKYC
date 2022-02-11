@@ -63,7 +63,7 @@ func SetupAsyncFaceMatch(image1 string, image2 string, apiType string, client mo
 	}
 
 	//Saving the api call info into the DB
-	apiCall, err := SaveApiCall(-1, apiType, client.ID)
+	apiCall, err := SaveApiCall(nil, nil, -1, apiType, client.ID)
 	if err != nil {
 		return models.Api_Calls{}, err
 	}
@@ -89,7 +89,7 @@ func SetupAsyncOcr(image string, apiType string, client models.Client) (models.A
 	}
 
 	//Saving the api call info into the DB
-	apiCall, err := SaveApiCall(-1, apiType, client.ID)
+	apiCall, err := SaveApiCall(nil, nil, -1, apiType, client.ID)
 	if err != nil {
 		return models.Api_Calls{}, err
 	}
