@@ -1,10 +1,17 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+
+	"gorm.io/datatypes"
+)
 
 type Api_Calls struct {
-	gorm.Model
-	Type        string
-	MatchResult float32
-	ClientID    uint
+	ID            uint `gorm:"primarykey"`
+	CreatedAt     time.Time
+	Type          string
+	Request       datatypes.JSON `json:"request"`
+	Response      datatypes.JSON `json:"response"`
+	ReponseStatus int            `json:"response_status"`
+	ClientID      uint
 }
