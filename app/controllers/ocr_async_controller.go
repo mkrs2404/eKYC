@@ -53,7 +53,8 @@ func AsyncOcrClient(c *gin.Context) {
 	}
 
 	//Saving the api call info into the DB
-	apiCall, err := services.SaveApiCall(-1, apiType, client.ID)
+	request, _ := json.Marshal(ocrRequest)
+	apiCall, err := services.SaveApiCall(request, nil, -1, apiType, client.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.DATABASE_SAVE_FAILED,

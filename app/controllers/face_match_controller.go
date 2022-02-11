@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
 	"math/rand"
 	"net/http"
 	"time"
@@ -60,16 +61,22 @@ func FaceMatchClient(c *gin.Context) {
 	faceMatchScore := rand.Intn(101)
 
 	//Saving the api call info into the DB
-	_, err = services.SaveApiCall(faceMatchScore, apiType, client.ID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"errorMsg": messages.DATABASE_SAVE_FAILED,
-		})
-		c.Abort()
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
+	request, _ := json.Marshal(faceMatchRequest)
+	c.Set("apitype", apiType)
+	c.Set("clientid", client.ID)
+	c.Set("request", request)
+	// _, err = services.SaveApiCall(request, apiType, client.ID)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{
+	// 		"errorMsg": messages.DATABASE_SAVE_FAILED,
+	// 	})
+	// 	c.Abort()
+	// 	return
+	// }
+	responseBody := gin.H{
 		"score": faceMatchScore,
-	})
+	}
+	response, _ := json.Marshal(responseBody)
+	c.Set("response", response)
+	c.JSON(http.StatusOK, responseBody)
 }

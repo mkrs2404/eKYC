@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -59,16 +60,20 @@ func OcrClient(c *gin.Context) {
 	pincode := faker.Address().Postcode()
 
 	//Saving the api call info into the DB
-	_, err = services.SaveApiCall(-1, apiType, client.ID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"errorMsg": messages.DATABASE_SAVE_FAILED,
-		})
-		c.Abort()
-		return
-	}
+	request, _ := json.Marshal(ocrRequest)
+	c.Set("apitype", apiType)
+	c.Set("clientid", client.ID)
+	c.Set("request", request)
+	// _, err = services.SaveApiCall(request, apiType, client.ID)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{
+	// 		"errorMsg": messages.DATABASE_SAVE_FAILED,
+	// 	})
+	// 	c.Abort()
+	// 	return
+	// }
 
-	c.JSON(http.StatusOK, gin.H{
+	responseBody := gin.H{
 		"name":         name,
 		"gender":       gender,
 		"dateOfBirth":  dateOfBirth,
@@ -76,6 +81,10 @@ func OcrClient(c *gin.Context) {
 		"addressLine1": addressLine1,
 		"addressLine2": addressLine2,
 		"pincode":      pincode,
-	})
+	}
+	response, _ := json.Marshal(responseBody)
+	c.Set("response", response)
+
+	c.JSON(http.StatusOK, responseBody)
 
 }

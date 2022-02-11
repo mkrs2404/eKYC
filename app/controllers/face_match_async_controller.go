@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"math/rand"
 	"net/http"
@@ -58,7 +59,8 @@ func AsyncFaceMatchClient(c *gin.Context) {
 	}
 
 	//Saving the api call info into the DB
-	apiCall, err := services.SaveApiCall(-1, apiType, client.ID)
+	request, _ := json.Marshal(faceMatchRequest)
+	apiCall, err := services.SaveApiCall(request, nil, -1, apiType, client.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errorMsg": messages.DATABASE_SAVE_FAILED,
@@ -125,7 +127,7 @@ func faceMatchWorker(apiCall models.Api_Calls) {
 	faceMatchScore := rand.Intn(101)
 
 	//Saving the api call info into the DB
-	_, err := services.UpdateApiCall(apiCall, faceMatchScore)
+	_, err := services.UpdateApiCall(apiCall)
 	if err != nil {
 		log.Fatal(err)
 	}
