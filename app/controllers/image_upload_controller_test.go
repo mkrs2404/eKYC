@@ -111,7 +111,7 @@ func TestImageUploadClient(t *testing.T) {
 	}
 
 	//Removing the uploaded files
-	os.Remove("./uploads")
+	services.DeleteLocalFile("./uploads")
 }
 
 //createMultipartPayload takes the local filepath and imagetype and generates a Multipart paylaod
