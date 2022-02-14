@@ -5,7 +5,6 @@ import (
 	"log"
 	"time"
 
-	"github.com/mkrs2404/eKYC/app/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -38,8 +37,4 @@ func Connect(dbHost string, dbName string, dbUser string, dbPassword string, dbP
 		log.Fatal(err)
 	}
 	DB = connection
-
-	//Migrating tables to the database
-	DB.AutoMigrate(&models.Plan{}, &models.Client{}, &models.File{}, &models.Api_Calls{})
-
 }
