@@ -2,21 +2,39 @@ package helper
 
 import (
 	"os"
+
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
-func SetEnvVariablesUtil(hostname, dbname, user, password, port, server_address, minio_server, minio_user, minio_pwd, redis_addr, redis_pwd string) {
+var (
+	hostname       = kingpin.Flag("host", "Hostname").String()
+	dbname         = kingpin.Flag("db", "Database name").String()
+	user           = kingpin.Flag("user", "Username").String()
+	password       = kingpin.Flag("pwd", "Password").String()
+	port           = kingpin.Flag("port", "Database port").String()
+	server_address = kingpin.Flag("server", "Server_IP:Port").String()
+	minio_server   = kingpin.Flag("minio_server", "Minio Server_IP:Port").String()
+	minio_pwd      = kingpin.Flag("minio_pwd", "Minio Password").String()
+	minio_user     = kingpin.Flag("minio_user", "Minio user").String()
+	redis_addr     = kingpin.Flag("redis_server", "Redis Server_IP:Port").String()
+	redis_pwd      = kingpin.Flag("redis_pwd", "Redis Password").String()
+)
 
-	setEnvVariables("DB_HOST", hostname)
-	setEnvVariables("DB_NAME", dbname)
-	setEnvVariables("DB_USER", user)
-	setEnvVariables("DB_PASSWORD", password)
-	setEnvVariables("DB_PORT", port)
-	setEnvVariables("SERVER_ADDR", server_address)
-	setEnvVariables("MINIO_SERVER", minio_server)
-	setEnvVariables("MINIO_USER", minio_user)
-	setEnvVariables("MINIO_PWD", minio_pwd)
-	setEnvVariables("REDIS_SERVER", redis_addr)
-	setEnvVariables("REDIS_PASSWORD", redis_pwd)
+func SetEnvVariablesUtil() {
+
+	kingpin.Parse()
+
+	setEnvVariables("DB_HOST", *hostname)
+	setEnvVariables("DB_NAME", *dbname)
+	setEnvVariables("DB_USER", *user)
+	setEnvVariables("DB_PASSWORD", *password)
+	setEnvVariables("DB_PORT", *port)
+	setEnvVariables("SERVER_ADDR", *server_address)
+	setEnvVariables("MINIO_SERVER", *minio_server)
+	setEnvVariables("MINIO_USER", *minio_user)
+	setEnvVariables("MINIO_PWD", *minio_pwd)
+	setEnvVariables("REDIS_SERVER", *redis_addr)
+	setEnvVariables("REDIS_PASSWORD", *redis_pwd)
 }
 
 func setEnvVariables(key, value string) {
