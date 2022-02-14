@@ -3,6 +3,28 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
+build-migration:
+	@echo "Building binary..." 
+	@go build -o migration.o ./cmd/migrations
+	clear
+
+run-migration:
+	@echo "Starting up docker..."
+	@docker-compose up -d --remove-orphans
+	make build-migration
+	@./migration.o
+
+build-seeder:
+	@echo "Building binary..." 
+	@go build -o seeder.o ./cmd/migrations
+	clear
+
+run-seeder:
+	@echo "Starting up docker..."
+	@docker-compose up -d --remove-orphans
+	make build-seeder
+	@./seeder.o
+
 build-api: 
 	@echo "Building binary..." 
 	@go build -o eKYC.o ./cmd/ekyc_api
