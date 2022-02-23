@@ -1,13 +1,13 @@
 FROM golang:1.17.6
 
 WORKDIR /eKYC
-COPY go.mod /
-COPY go.sum /
+COPY go.mod ./
+COPY go.sum ./
 
-COPY . /eKYC
+COPY . ./
 
 RUN go build -o eKYC.o ./cmd/ekyc_api
 
 EXPOSE 8080
 
-CMD [ "source ./.env", "./eKYC.o" ]
+CMD ["./eKYC.o" ]
