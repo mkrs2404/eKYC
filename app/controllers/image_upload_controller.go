@@ -72,6 +72,7 @@ func UploadImageClient(c *gin.Context) {
 			"reason":   messages.BUCKET_CREATION_FAILED,
 		})
 		c.Abort()
+		return
 	}
 
 	//path of the file to be uploaded
@@ -85,6 +86,7 @@ func UploadImageClient(c *gin.Context) {
 			"reason":   messages.MINIO_UPLOAD_FAILED,
 		})
 		c.Abort()
+		return
 	}
 
 	//Setting the objectName to delete later, if required
