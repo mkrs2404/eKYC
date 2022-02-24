@@ -18,6 +18,17 @@ import (
 	"github.com/mkrs2404/eKYC/app/services"
 )
 
+// UploadImageClient godoc
+// @Summary      Uploads an image
+// @ID           image-upload-client
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header    string  true  "Authentication header"
+// @Param		 message	body	resources.UploadImageRequest 	true	"Image Info"
+// @Success      200  {object} 	object{id=string}
+// @Failure      400  "Invalid Request"
+// @Failure      500  "Internal Server Error"
+// @Router       /image [post]
 //Handler for /api/v1/image
 func UploadImageClient(c *gin.Context) {
 

@@ -10,6 +10,7 @@ import (
 	"github.com/mkrs2404/eKYC/app/minio_client"
 	"github.com/mkrs2404/eKYC/app/redis_client"
 	"github.com/mkrs2404/eKYC/app/server"
+	_ "github.com/mkrs2404/eKYC/docs"
 	"gorm.io/gorm/logger"
 )
 
@@ -17,6 +18,19 @@ func init() {
 	helper.SetEnvVariablesUtil()
 }
 
+// @title           eKYC API
+// @version         1.0
+// @description     This project provides APIs to sign up a client, upload images, perform face match on face type images or OCR on id card type ones
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.email  mohit@one2n.in
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/v1
 func main() {
 
 	// err := godotenv.Load("../../.env")

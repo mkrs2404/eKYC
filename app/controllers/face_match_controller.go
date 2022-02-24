@@ -15,6 +15,17 @@ import (
 	"github.com/mkrs2404/eKYC/app/services"
 )
 
+// FaceMatchClient godoc
+// @Summary      Matches 2 face type images
+// @ID           face-match-client
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header    string  true  "Authentication header"
+// @Param		 message	body	resources.FaceMatchRequest 	true	"Match Request Info"
+// @Success      200  {object} 	object{score=int}
+// @Failure      400  "Invalid Request"
+// @Failure      500  "Internal Server Error"
+// @Router       /face-match [post]
 func FaceMatchClient(c *gin.Context) {
 
 	const apiType = "face-match"
