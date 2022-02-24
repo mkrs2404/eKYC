@@ -1,0 +1,344 @@
+basePath: /api/v1
+definitions:
+  resources.FaceMatchRequest:
+    properties:
+      image1:
+        type: string
+      image2:
+        type: string
+    required:
+    - image1
+    - image2
+    type: object
+  resources.OcrData:
+    properties:
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      dateOfBirth:
+        type: string
+      gender:
+        type: string
+      idNumber:
+        type: string
+      name:
+        type: string
+      pincode:
+        type: string
+    type: object
+  resources.OcrRequest:
+    properties:
+      image:
+        type: string
+    required:
+    - image
+    type: object
+  resources.SignUpRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      plan:
+        enum:
+        - basic
+        - advanced
+        - enterprise
+        type: string
+    required:
+    - email
+    - plan
+    type: object
+  resources.UploadImageRequest:
+    properties:
+      imageType:
+        enum:
+        - face
+        - id_card
+        type: string
+    required:
+    - imageType
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: mohit@one2n.in
+    name: API Support
+  description: This project provides APIs to sign up a client, upload images, perform
+    face match on face type images or OCR on id card type ones
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: eKYC API
+  version: "1.0"
+paths:
+  /face-match:
+    post:
+      consumes:
+      - application/json
+      operationId: face-match-client
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Match Request Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/resources.FaceMatchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                score:
+                  type: integer
+              type: object
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Matches 2 face type images
+  /face-match-async:
+    post:
+      consumes:
+      - application/json
+      operationId: face-match-async-client
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Match Request Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/resources.FaceMatchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                job_id:
+                  type: integer
+              type: object
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Matches 2 face type images(async)
+  /get-ocr-data:
+    post:
+      consumes:
+      - application/json
+      operationId: get-ocr-data-client
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Job Info
+        in: body
+        name: message
+        required: true
+        schema:
+          allOf:
+          - type: object
+          - properties:
+              job_id:
+                type: integer
+            type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resources.OcrData'
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Gets OCR data
+  /get-score:
+    post:
+      consumes:
+      - application/json
+      operationId: get-face-match-score-client
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Job Info
+        in: body
+        name: message
+        required: true
+        schema:
+          allOf:
+          - type: object
+          - properties:
+              job_id:
+                type: integer
+            type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                score:
+                  type: integer
+              type: object
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Gets face match score
+  /image:
+    post:
+      consumes:
+      - application/json
+      operationId: image-upload-client
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Image Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/resources.UploadImageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                id:
+                  type: string
+              type: object
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Uploads an image
+  /ocr:
+    post:
+      consumes:
+      - application/json
+      operationId: ocr-client
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: OCR Request Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/resources.OcrRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resources.OcrData'
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Gets OCR data
+  /ocr-async:
+    post:
+      consumes:
+      - application/json
+      operationId: ocr-async-client
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: OCR Request Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/resources.OcrRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                job_id:
+                  type: integer
+              type: object
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Gets OCR job id
+  /signup:
+    post:
+      consumes:
+      - application/json
+      operationId: sign-up-client
+      parameters:
+      - description: Client Info
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/resources.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                access_key:
+                  type: string
+              type: object
+        "400":
+          description: Invalid Request
+        "500":
+          description: Internal Server Error
+      summary: Signs up a client
+swagger: "2.0"
