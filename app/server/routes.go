@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/app/controllers"
 	"github.com/mkrs2404/eKYC/app/middlewares"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 func InitializeRoutes(router *gin.Engine) {
@@ -20,6 +22,7 @@ func InitializeRoutes(router *gin.Engine) {
 	ImageAPI(authRouterGroup)
 	MatchAPI(authRouterGroup)
 	OcrAPI(authRouterGroup)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
 func ImageAPI(r gin.IRoutes) {
