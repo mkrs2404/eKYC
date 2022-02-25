@@ -1,0 +1,1 @@
+/usr/local/bin/docker run -d --network=ekyc_default daily_report
