@@ -14,15 +14,15 @@ import (
 )
 
 // SignUpClient godoc
-// @Summary      Signs up a client
-// @ID           sign-up-client
-// @Accept       json
-// @Produce      json
-// @Param		 message	body	resources.SignUpRequest 	true	"Client Info"
-// @Success      200  {object} 	object{access_key=string}
-// @Failure      400  "Invalid Request"
-// @Failure      500  "Internal Server Error"
-// @Router       /signup [post]
+// @Summary  Signs up a client
+// @ID       sign-up-client
+// @Accept   json
+// @Produce  json
+// @Param                   message  body  resources.SignUpRequest    true  "Client Info"
+// @Success  200  {object}           object{access_key=string}
+// @Failure  400  "Invalid Request"
+// @Failure  500  "Internal Server Error"
+// @Router   /signup [post]
 //Handler for /api/v1/signup
 func SignUpClient(c *gin.Context) {
 

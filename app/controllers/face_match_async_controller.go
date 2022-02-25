@@ -18,16 +18,16 @@ import (
 )
 
 // AsyncFaceMatchClient godoc
-// @Summary      Matches 2 face type images(async)
-// @ID           face-match-async-client
-// @Accept       json
-// @Produce      json
-// @Param        Authorization  header    string  true  "Authentication header"
-// @Param		 message	body	resources.FaceMatchRequest 	true	"Match Request Info"
-// @Success      200  {object} 	object{job_id=int}
-// @Failure      400  "Invalid Request"
-// @Failure      500  "Internal Server Error"
-// @Router       /face-match-async [post]
+// @Summary  Matches 2 face type images(async)
+// @ID       face-match-async-client
+// @Accept   json
+// @Produce  json
+// @Param    Authorization  header    string   true  "Authentication header"
+// @Param                             message  body  resources.FaceMatchRequest    true  "Match Request Info"
+// @Success  200            {object}           object{job_id=int}
+// @Failure  400            "Invalid Request"
+// @Failure  500            "Internal Server Error"
+// @Router   /face-match-async [post]
 func AsyncFaceMatchClient(c *gin.Context) {
 
 	const apiType = "face-match"
@@ -90,16 +90,16 @@ func AsyncFaceMatchClient(c *gin.Context) {
 }
 
 // GetFaceMatchScore godoc
-// @Summary      Gets face match score
-// @ID           get-face-match-score-client
-// @Accept       json
-// @Produce      json
-// @Param        Authorization  header    string  true  "Authentication header"
-// @Param		 message	body	object{job_id=int} 	true	"Job Info"
-// @Success      200  {object} 	object{score=int}
-// @Failure      400  "Invalid Request"
-// @Failure      500  "Internal Server Error"
-// @Router       /get-score [post]
+// @Summary  Gets face match score
+// @ID       get-face-match-score-client
+// @Accept   json
+// @Produce  json
+// @Param    Authorization  header    string   true  "Authentication header"
+// @Param                             message  body  object{job_id=int}    true  "Job Info"
+// @Success  200            {object}           object{score=int}
+// @Failure  400            "Invalid Request"
+// @Failure  500            "Internal Server Error"
+// @Router   /get-score [post]
 func GetFaceMatchScore(c *gin.Context) {
 
 	//Getting the client object from previous http.handler

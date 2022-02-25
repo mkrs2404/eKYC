@@ -18,16 +18,16 @@ import (
 )
 
 // AsyncOCRClient godoc
-// @Summary      Gets OCR job id
-// @ID           ocr-async-client
-// @Accept       json
-// @Produce      json
-// @Param        Authorization  header    string  true  "Authentication header"
-// @Param		 message	body	resources.OcrRequest 	true	"OCR Request Info"
-// @Success      200  {object} 	object{job_id=int}
-// @Failure      400  "Invalid Request"
-// @Failure      500  "Internal Server Error"
-// @Router       /ocr-async [post]
+// @Summary  Gets OCR job id
+// @ID       ocr-async-client
+// @Accept   json
+// @Produce  json
+// @Param    Authorization  header    string   true  "Authentication header"
+// @Param                             message  body  resources.OcrRequest    true  "OCR Request Info"
+// @Success  200            {object}           object{job_id=int}
+// @Failure  400            "Invalid Request"
+// @Failure  500            "Internal Server Error"
+// @Router   /ocr-async [post]
 func AsyncOcrClient(c *gin.Context) {
 
 	const apiType = "ocr"
@@ -84,16 +84,16 @@ func AsyncOcrClient(c *gin.Context) {
 }
 
 // GetOcrData godoc
-// @Summary      Gets OCR data
-// @ID           get-ocr-data-client
-// @Accept       json
-// @Produce      json
-// @Param        Authorization  header    string  true  "Authentication header"
-// @Param		 message	body	object{job_id=int} 	true	"Job Info"
-// @Success      200  {object} 	resources.OcrData
-// @Failure      400  "Invalid Request"
-// @Failure      500  "Internal Server Error"
-// @Router       /get-ocr-data [post]
+// @Summary  Gets OCR data
+// @ID       get-ocr-data-client
+// @Accept   json
+// @Produce  json
+// @Param    Authorization  header    string   true  "Authentication header"
+// @Param                             message  body  object{job_id=int}    true  "Job Info"
+// @Success  200            {object}           resources.OcrData
+// @Failure  400            "Invalid Request"
+// @Failure  500            "Internal Server Error"
+// @Router   /get-ocr-data [post]
 func GetOcrData(c *gin.Context) {
 
 	//Getting the client object from previous http.handler
