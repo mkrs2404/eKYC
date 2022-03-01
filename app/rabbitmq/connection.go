@@ -19,7 +19,7 @@ func InitializeRabbitMq(userName, password, host string) {
 	if userName == "" || password == "" {
 		userName, password = "guest", "guest"
 	}
-	connString := fmt.Sprintf("amqp://%s:%s@localhost:5672/", userName, password)
+	connString := fmt.Sprintf("amqp://%s:%s@%s/", userName, password, host)
 	conn, err := amqp.Dial(connString)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	rabbitMq = conn
