@@ -18,10 +18,16 @@ func SaveApiCall(request []byte, response []byte, responseStatus int, apiType st
 	return api_call, err
 }
 
-func UpdateApiCall(api_call models.Api_Calls) (models.Api_Calls, error) {
+func UpdateApiCallResponse(api_call_id int, response []byte, responseStatus int) (models.Api_Calls, error) {
 
-	database.DB.First(&api_call)
-	err := database.DB.Save(&api_call).Error
+	var api_call models.Api_Calls
+	err := database.DB.First(&api_call, api_call_id).Error
+	if err != nil {
+		return api_call, err
+	}
+	api_call.ReponseStatus = responseStatus
+	api_call.Response = response
+	err = database.DB.Save(&api_call).Error
 	return api_call, err
 }
 
@@ -30,4 +36,10 @@ func ValidateJobId(jobId, clientId int) error {
 	var api_call models.Api_Calls
 	err := database.DB.Where("id = ? AND client_id = ?", jobId, clientId).First(&api_call).Error
 	return err
+}
+
+func GetApiCall(jobId int) (models.Api_Calls, error) {
+	var api_call models.Api_Calls
+	err := database.DB.First(&api_call, jobId).Error
+	return api_call, err
 }
