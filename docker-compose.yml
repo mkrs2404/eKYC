@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres
-    container_name:
+    container_name: postgresql
     restart: always
     environment:
       POSTGRES_USER:
@@ -16,7 +16,7 @@ services:
 
   test_db:
     image: postgres
-    container_name:
+    container_name: test_postgresql
     restart: always
     environment:
       POSTGRES_USER: 
@@ -61,6 +61,15 @@ services:
     volumes:
       - redis_data:/data
     
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - rabbitmq:/var/lib/rabbitmq/
+        - rabbitmq:/var/log/rabbitmq
 
 volumes:
   pgdata:
@@ -68,3 +77,4 @@ volumes:
   testpgdata:
   minio_data:
   redis_data:
+  rabbitmq:
