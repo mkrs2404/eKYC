@@ -17,6 +17,13 @@ func InitializeRoutes(router *gin.Engine) {
 	//Signup API routes
 	router.POST("/api/v1/signup", controllers.SignUpClient)
 
+	//Async APIs
+	router.POST("/api/v1/face-match-async", middlewares.AuthRequired(), controllers.AsyncFaceMatchClient, middlewares.UpdateApi())
+	router.POST("/api/v1/get-score", middlewares.AuthRequired(), controllers.GetFaceMatchScore, middlewares.UpdateApi())
+
+	router.POST("/api/v1/ocr-async", middlewares.AuthRequired(), controllers.AsyncOcrClient, middlewares.UpdateApi())
+	router.POST("/api/v1/get-ocr-data", middlewares.AuthRequired(), controllers.GetOcrData, middlewares.UpdateApi())
+
 	routerGroup := router.Group("/api/v1")
 	authRouterGroup := routerGroup.Use(middlewares.AuthRequired())
 	ImageAPI(authRouterGroup)
@@ -32,14 +39,9 @@ func ImageAPI(r gin.IRoutes) {
 func MatchAPI(r gin.IRoutes) {
 	r.Use(middlewares.SaveApi())
 	r.POST("/face-match", controllers.FaceMatchClient)
-	r.POST("/face-match-async", controllers.AsyncFaceMatchClient)
-	r.POST("/get-score", controllers.GetFaceMatchScore)
-
 }
 
 func OcrAPI(r gin.IRoutes) {
 	r.Use(middlewares.SaveApi())
 	r.POST("/ocr", controllers.OcrClient)
-	r.POST("/ocr-async", controllers.AsyncOcrClient)
-	r.POST("/get-ocr-data", controllers.GetOcrData)
 }
