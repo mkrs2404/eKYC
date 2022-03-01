@@ -38,7 +38,7 @@ Run following commands in the root directory:
 - Run API
 
 ```
-make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> server=<IP:Port> minio_server=<IP:Port> minio_pwd=<minio_pwd> minio_user=<minio_user> redis_server=<IP:Port> redis_pwd= <redis_pwd> run
+make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> server=<IP:Port> minio_server=<IP:Port> minio_pwd=<minio_pwd> minio_user=<minio_user> redis_server=<IP:Port> redis_pwd= <redis_pwd> rabbitmq_server=<rabbitmq_server> rabbitmq_user=<rabbitmq_user> rabbitmq_pwd=<rabbitmq_pwd> face_worker_queue=<face_worker_queue> run
 ```
 
 - Generate Daily Report
@@ -97,4 +97,13 @@ TEST_DB_NAME=
 TEST_DB_USER=
 TEST_DB_PASSWORD=
 TEST_DB_PORT=
+TEST_MINIO_SERVER=
+TEST_MINIO_USER=
+TEST_MINIO_PWD=
+
+#RabbitMQ Client
+RABBITMQ_SERVER=
+RABBITMQ_USER=
+RABBITMQ_PWD=
+FACE_WORKER_QUEUE=
 ```
