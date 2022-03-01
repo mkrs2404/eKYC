@@ -4,17 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"log"
-	"math/rand"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/app/helper"
 	"github.com/mkrs2404/eKYC/app/messages"
 	"github.com/mkrs2404/eKYC/app/models"
+	"github.com/mkrs2404/eKYC/app/rabbitmq"
 	"github.com/mkrs2404/eKYC/app/resources"
 	"github.com/mkrs2404/eKYC/app/services"
+	"github.com/streadway/amqp"
 )
 
 // AsyncFaceMatchClient godoc
@@ -22,9 +22,9 @@ import (
 // @ID       face-match-async-client
 // @Accept   json
 // @Produce  json
-// @Param    Authorization  header    string   true  "Authentication header"
-// @Param                             message  body  resources.FaceMatchRequest    true  "Match Request Info"
-// @Success  200            {object}           object{job_id=int}
+// @Param    Authorization  header    string                      true  "Authentication header"
+// @Param    message        body      resources.FaceMatchRequest  true  "Match Request Info"
+// @Success  200            {object}  object{job_id=int}
 // @Failure  400            "Invalid Request"
 // @Failure  500            "Internal Server Error"
 // @Router   /face-match-async [post]
@@ -80,8 +80,10 @@ func AsyncFaceMatchClient(c *gin.Context) {
 		return
 	}
 
-	//goroutine mimicking ML workload
-	go faceMatchWorker(apiCall)
+	//Sending job to RabbitMQ
+	ch, q := rabbitmq.SetupFaceMatchProducer()
+	job := resources.CreateFaceMatchJob(faceMatchRequest.Image1, faceMatchRequest.Image2, apiCall.ID)
+	SendJob(ch, q, job)
 
 	c.JSON(http.StatusOK, gin.H{
 		"job_id": apiCall.ID,
@@ -89,14 +91,32 @@ func AsyncFaceMatchClient(c *gin.Context) {
 
 }
 
+func SendJob(ch *amqp.Channel, q amqp.Queue, job *resources.FaceMatchJob) {
+
+	body, err := json.Marshal(job)
+	failOnError(err, "Failed to publish a message")
+
+	err = ch.Publish(
+		"",     // exchange
+		q.Name, // routing key
+		false,  // mandatory
+		false,
+		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
+			ContentType:  "application/json",
+			Body:         body,
+		})
+	failOnError(err, "Failed to publish a message")
+}
+
 // GetFaceMatchScore godoc
 // @Summary  Gets face match score
 // @ID       get-face-match-score-client
 // @Accept   json
 // @Produce  json
-// @Param    Authorization  header    string   true  "Authentication header"
-// @Param                             message  body  object{job_id=int}    true  "Job Info"
-// @Success  200            {object}           object{score=int}
+// @Param    Authorization  header    string              true  "Authentication header"
+// @Param    message        body      object{job_id=int}  true  "Job Info"
+// @Success  200            {object}  object{score=int}
 // @Failure  400            "Invalid Request"
 // @Failure  500            "Internal Server Error"
 // @Router   /get-score [post]
@@ -133,30 +153,20 @@ func GetFaceMatchScore(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	responseBody := gin.H{
 		"score": score,
-	})
+	}
+	response, _ := json.Marshal(responseBody)
+
+	//Saving the api call info into the DB
+	c.Set("api_call_id", faceMatchJob.JobId)
+	c.Set("response", response)
+	c.JSON(http.StatusOK, responseBody)
 
 }
 
-func faceMatchWorker(apiCall models.Api_Calls) {
-
-	//Simulating ML workload
-	time.Sleep(10 * time.Second)
-
-	rand.Seed(time.Now().UnixNano())
-	//Random score generation between 0-100
-	faceMatchScore := rand.Intn(101)
-
-	//Saving the api call info into the DB
-	_, err := services.UpdateApiCall(apiCall)
+func failOnError(err error, msg string) {
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	//Setting the score in Redis
-	err = services.SetToRedis(strconv.Itoa(int(apiCall.ID)), faceMatchScore, time.Hour)
-	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("%s: %s", msg, err)
 	}
 }
