@@ -8,6 +8,7 @@ import (
 	"github.com/mkrs2404/eKYC/app/database"
 	"github.com/mkrs2404/eKYC/app/helper"
 	"github.com/mkrs2404/eKYC/app/minio_client"
+	"github.com/mkrs2404/eKYC/app/rabbitmq"
 	"github.com/mkrs2404/eKYC/app/redis_client"
 	"github.com/mkrs2404/eKYC/app/server"
 	_ "github.com/mkrs2404/eKYC/docs"
@@ -43,5 +44,6 @@ func main() {
 	// services.SeedPlanData()
 	minio_client.InitializeMinio(os.Getenv("MINIO_SERVER"), os.Getenv("MINIO_USER"), os.Getenv("MINIO_PWD"))
 	redis_client.InitializeRedis(os.Getenv("REDIS_SERVER"), os.Getenv("REDIS_PASSWORD"))
+	rabbitmq.InitializeRabbitMq(os.Getenv("RABBITMQ_USER"), os.Getenv("RABBITMQ_PWD"), os.Getenv("RABBITMQ_SERVER"))
 	server.InitializeRouter()
 }
