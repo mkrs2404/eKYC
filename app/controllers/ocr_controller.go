@@ -20,9 +20,9 @@ import (
 // @ID       ocr-client
 // @Accept   json
 // @Produce  json
-// @Param    Authorization  header    string   true  "Authentication header"
-// @Param                             message  body  resources.OcrRequest    true  "OCR Request Info"
-// @Success  200            {object}           resources.OcrData
+// @Param    Authorization  header    string                true  "Authentication header"
+// @Param    message        body      resources.OcrRequest  true  "OCR Request Info"
+// @Success  200            {object}  resources.OcrData
 // @Failure  400            "Invalid Request"
 // @Failure  500            "Internal Server Error"
 // @Router   /ocr [post]

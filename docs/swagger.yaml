@@ -50,16 +50,6 @@ definitions:
     - email
     - plan
     type: object
-  resources.UploadImageRequest:
-    properties:
-      imageType:
-        enum:
-        - face
-        - id_card
-        type: string
-    required:
-    - imageType
-    type: object
 host: localhost:8080
 info:
   contact:
@@ -218,7 +208,7 @@ paths:
   /image:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       operationId: image-upload-client
       parameters:
       - description: Authentication header
@@ -226,12 +216,19 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: Image Info
-        in: body
-        name: message
+      - description: Image
+        in: formData
+        name: file
         required: true
-        schema:
-          $ref: '#/definitions/resources.UploadImageRequest'
+        type: file
+      - description: Type
+        enum:
+        - face
+        - id_card
+        in: formData
+        name: type
+        required: true
+        type: string
       produces:
       - application/json
       responses:

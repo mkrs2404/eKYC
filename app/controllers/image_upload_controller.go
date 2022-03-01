@@ -21,12 +21,12 @@ import (
 // UploadImageClient godoc
 // @Summary  Uploads an image
 // @ID       image-upload-client
-// @Accept   json
+// @Accept   multipart/form-data
 // @Produce  json
-// @Param    Authorization  header    string   true  "Authentication header"
-// @Param                             message  body  resources.UploadImageRequest        true  "Image Info"
-// @Param                             file           formData                      file  true  "Image"
-// @Success  200            {object}           object{id=string}
+// @Param    Authorization  header    string  true  "Authentication header"
+// @Param    file           formData  file    true  "Image"
+// @Param    type           formData  string  true  "Type"  Enums(face, id_card)
+// @Success  200            {object}  object{id=string}
 // @Failure  400            "Invalid Request"
 // @Failure  500            "Internal Server Error"
 // @Router   /image [post]

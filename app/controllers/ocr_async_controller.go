@@ -22,9 +22,9 @@ import (
 // @ID       ocr-async-client
 // @Accept   json
 // @Produce  json
-// @Param    Authorization  header    string   true  "Authentication header"
-// @Param                             message  body  resources.OcrRequest    true  "OCR Request Info"
-// @Success  200            {object}           object{job_id=int}
+// @Param    Authorization  header    string                true  "Authentication header"
+// @Param    message        body      resources.OcrRequest  true  "OCR Request Info"
+// @Success  200            {object}  object{job_id=int}
 // @Failure  400            "Invalid Request"
 // @Failure  500            "Internal Server Error"
 // @Router   /ocr-async [post]
@@ -88,9 +88,9 @@ func AsyncOcrClient(c *gin.Context) {
 // @ID       get-ocr-data-client
 // @Accept   json
 // @Produce  json
-// @Param    Authorization  header    string   true  "Authentication header"
-// @Param                             message  body  object{job_id=int}    true  "Job Info"
-// @Success  200            {object}           resources.OcrData
+// @Param    Authorization  header    string              true  "Authentication header"
+// @Param    message        body      object{job_id=int}  true  "Job Info"
+// @Success  200            {object}  resources.OcrData
 // @Failure  400            "Invalid Request"
 // @Failure  500            "Internal Server Error"
 // @Router   /get-ocr-data [post]

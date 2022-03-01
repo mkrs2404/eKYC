@@ -8,7 +8,7 @@ import (
 
 type UploadImageRequest struct {
 	ImageType string                `form:"type" binding:"required" validate:"oneof=face id_card"`
-	Image     *multipart.FileHeader `form:"file" binding:"required" swaggerignore:"true" swaggertype:"file"`
+	Image     *multipart.FileHeader `form:"file" binding:"required"`
 }
 
 //Validate validates the Sign Up request parameters

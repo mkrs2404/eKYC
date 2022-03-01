@@ -263,7 +263,7 @@ const docTemplate = `{
         "/image": {
             "post": {
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -279,13 +279,22 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Image Info",
-                        "name": "message",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/resources.UploadImageRequest"
-                        }
+                        "type": "file",
+                        "description": "Image",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "face",
+                            "id_card"
+                        ],
+                        "type": "string",
+                        "description": "Type",
+                        "name": "type",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -538,21 +547,6 @@ const docTemplate = `{
                         "basic",
                         "advanced",
                         "enterprise"
-                    ]
-                }
-            }
-        },
-        "resources.UploadImageRequest": {
-            "type": "object",
-            "required": [
-                "imageType"
-            ],
-            "properties": {
-                "imageType": {
-                    "type": "string",
-                    "enum": [
-                        "face",
-                        "id_card"
                     ]
                 }
             }
