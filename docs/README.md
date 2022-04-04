@@ -35,10 +35,16 @@ You can create an .env file as per the [template](#env-template), or pass all th
 
 Run following commands in the root directory:
 
-- Run API
+- Run API without containerization
 
 ```
 make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> server=<IP:Port> minio_server=<IP:Port> minio_pwd=<minio_pwd> minio_user=<minio_user> redis_server=<IP:Port> redis_pwd= <redis_pwd> rabbitmq_server=<rabbitmq_server> rabbitmq_user=<rabbitmq_user> rabbitmq_pwd=<rabbitmq_pwd> face_worker_queue=<face_worker_queue> run
+```
+
+- Run Dockerized API
+
+```
+make run-dockerized-api
 ```
 
 - Generate Daily Report

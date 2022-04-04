@@ -40,6 +40,10 @@ run-api:
 	--rabbitmq_server=$(rabbitmq_server) --rabbitmq_user=$(rabbitmq_user) --rabbitmq_pwd=$(rabbitmq_pwd)
 	--face_worker_queue=$(face_worker_queue)
 
+run-dockerized-api:
+	@echo "Starting up docker..."
+	@docker-compose up -d --remove-orphans
+
 build-daily-report: 
 	@echo "Building binary..." 
 	@go build -o daily_report.o ./cmd/daily_report
