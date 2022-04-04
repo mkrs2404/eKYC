@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/mkrs2404/eKYC/app/rabbitmq"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -64,6 +65,7 @@ func TestMain(m *testing.M) {
 
 	minio_client.InitializeMinio(os.Getenv("TEST_MINIO_SERVER"), os.Getenv("TEST_MINIO_USER"), os.Getenv("TEST_MINIO_PWD"))
 	redis_client.InitializeRedis(os.Getenv("REDIS_SERVER"), os.Getenv("REDIS_PASSWORD"))
+	rabbitmq.InitializeRabbitMq(os.Getenv("RABBITMQ_USER"), os.Getenv("RABBITMQ_PWD"), os.Getenv("RABBITMQ_SERVER"))
 	exitVal := m.Run()
 	os.Exit(exitVal)
 }
