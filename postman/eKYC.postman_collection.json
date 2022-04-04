@@ -1,0 +1,342 @@
+{
+	"info": {
+		"_postman_id": "d1db018c-fa60-4deb-96c0-b7e4832cb9fc",
+		"name": "eKYC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sign Up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"rob\",\n    \"email\":\"rob@gmail.com\",\n    \"plan\":\"enterprise\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Image Upload(face)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDkxNjMyNTAuMTE2NDkxLCJpc3MiOiIzNSJ9.As5ICXtY7iQz9l-W_gugNrhRAgM3TB0AEIrcLct7Jgo",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "type",
+							"value": "face",
+							"contentType": "application/json",
+							"type": "default"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/mohit/go/workspace/eKYC/app/assets/architecture.png"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/image",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Image Upload(id_card)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDM5NzUzNDkuMjQ2NjQ2LCJpc3MiOiIyNCJ9.x8LUmqPL_9XJaB9gY4go2tiKTAv-kL6Wg6Yiwjgiz-I",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "type",
+							"value": "id_card",
+							"contentType": "application/json",
+							"type": "default"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/mohit/go/workspace/eKYC/assets/architecture.png"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/image",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Face Match",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDkxNjMyNTAuMTE2NDkxLCJpc3MiOiIzNSJ9.As5ICXtY7iQz9l-W_gugNrhRAgM3TB0AEIrcLct7Jgo",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image1\":\"862d5c70-4c4b-44e2-923b-7e193c68b8be\",\n    \"image2\":\"a26e7188-5e8c-46c6-8806-74c91f518c07\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/face-match",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"face-match"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OCR",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDM5NzUzNDkuMjQ2NjQ2LCJpc3MiOiIyNCJ9.x8LUmqPL_9XJaB9gY4go2tiKTAv-kL6Wg6Yiwjgiz-I",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image\":\"5c1df7eb-8270-4013-bf91-478b8b7aba43\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/ocr",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ocr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Async Face Match",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDkxNjMyNTAuMTE2NDkxLCJpc3MiOiIzNSJ9.As5ICXtY7iQz9l-W_gugNrhRAgM3TB0AEIrcLct7Jgo",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image1\":\"862d5c70-4c4b-44e2-923b-7e193c68b8be\",\n    \"image2\":\"a26e7188-5e8c-46c6-8806-74c91f518c07\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/face-match-async",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"face-match-async"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get face match score",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDkxNjMyNTAuMTE2NDkxLCJpc3MiOiIzNSJ9.As5ICXtY7iQz9l-W_gugNrhRAgM3TB0AEIrcLct7Jgo",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"job_id\": 21\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/get-score",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get-score"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Async OCR",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDU2Nzg0NDAuNjU2MjY5LCJpc3MiOiIyOSJ9.s7_YyTg3IKgfLZwzARCppVjNW5m8FLq-SlLn0p8WPcQ",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image\":\"e3a908d0-cf9b-4c2c-af6e-2d2ab568c291\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/ocr-async",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ocr-async"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get OCR Data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDU2Nzg0NDAuNjU2MjY5LCJpc3MiOiIyOSJ9.s7_YyTg3IKgfLZwzARCppVjNW5m8FLq-SlLn0p8WPcQ",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"job_id\": 14\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/get-ocr-data",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"get-ocr-data"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
