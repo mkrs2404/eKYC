@@ -44,6 +44,8 @@ make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> 
 - Run Dockerized API
 
 ```
+docker build --tag=ekyc -f api.Dockerfile .
+docker build --tag=face_match_worker -f face_match_worker.Dockerfile .
 make run-dockerized-api
 ```
 
