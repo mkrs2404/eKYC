@@ -34,13 +34,11 @@ run-api:
 	@echo "Starting up docker..."
 	@docker-compose up -d --remove-orphans
 	make build-api
-	@./eKYC.o
-
-	# @./eKYC.o --host=$(host) --db=$(db) --user=$(user) --pwd=$(pwd) --port=$(port) 
-	# --server=$(server) --minio_server=$(minio_server) --minio_pwd=$(minio_pwd) 
-	# --minio_user=$(minio_user) --redis_server=$(redis_server) --redis_pwd=$(redis_pwd)
-	# --rabbitmq_server=$(rabbitmq_server) --rabbitmq_user=$(rabbitmq_user) --rabbitmq_pwd=$(rabbitmq_pwd)
-	# --face_worker_queue=$(face_worker_queue)
+	@./eKYC.o --host=$(host) --db=$(db) --user=$(user) --pwd=$(pwd) --port=$(port) 
+	--server=$(server) --minio_server=$(minio_server) --minio_pwd=$(minio_pwd) 
+	--minio_user=$(minio_user) --redis_server=$(redis_server) --redis_pwd=$(redis_pwd)
+	--rabbitmq_server=$(rabbitmq_server) --rabbitmq_user=$(rabbitmq_user) --rabbitmq_pwd=$(rabbitmq_pwd)
+	--face_worker_queue=$(face_worker_queue)
 
 run-dockerized-api:
 	@echo "Starting up docker..."
