@@ -32,7 +32,7 @@ build-api:
 
 run-api:
 	@echo "Starting up docker..."
-	@docker-compose up -d --remove-orphans 
+	@docker-compose up -d --remove-orphans
 	make build-api
 	@./eKYC.o
 
@@ -44,7 +44,7 @@ run-api:
 
 run-dockerized-api:
 	@echo "Starting up docker..."
-	@docker-compose --env-file .env up -d --remove-orphans
+	@docker-compose up -d --remove-orphans
 
 build-daily-report: 
 	@echo "Building binary..." 
