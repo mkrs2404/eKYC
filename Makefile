@@ -74,7 +74,7 @@ clean:
 	@echo "Shutting down docker..."
 	@docker-compose down
 	@echo "Cleaning binaries..."
-	@rm eKYC.o
+	# @rm eKYC.o
 	@go clean
 	@go clean -testcache
 	clear

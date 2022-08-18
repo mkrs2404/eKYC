@@ -1,23 +1,31 @@
 version: '3.8'
 
 services:
-
   app:
-    image: ekyc
-    restart: always
+    image: ekyc    
     container_name: ekyc
     ports:
-     - "8080:8080"
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+      - db
+      - minio
+      - redis
+    env_file: .env
 
   face_match_worker:
-    image: face_match_worker
-    restart: always
+    image: face_match_worker  
     container_name: face_match_worker
+    depends_on:
+      - rabbitmq
+      - db
+      - minio
+      - redis
+    env_file: .env 
 
   db:
     image: postgres
-    container_name: postgresql
-    restart: always
+    container_name: postgresql 
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -30,7 +38,6 @@ services:
   test_db:
     image: postgres
     container_name: test_postgresql
-    restart: always
     environment:
       POSTGRES_USER: test_postgres
       POSTGRES_PASSWORD: postgres
@@ -43,7 +50,6 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4
-    restart: always
     ports:
       - "5050:80"
     environment:
@@ -54,7 +60,6 @@ services:
 
   minio:
     image: "minio/minio"
-    restart: always
     container_name: minio
     ports:
       - "9000:9000"
@@ -67,7 +72,6 @@ services:
       - "minio_data:/data"
 
   redis:
-    restart: always
     image: redis
     container_name: redis
     ports:
@@ -79,11 +83,11 @@ services:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
     ports:
-        - 5672:5672
-        - 15672:15672
+      - 5672:5672
+      - 15672:15672
     volumes:
-        - rabbitmq:/var/lib/rabbitmq/
-        - rabbitmq:/var/log/rabbitmq
+      - rabbitmq:/var/lib/rabbitmq/
+      - rabbitmq:/var/log/rabbitmq
 
 volumes:
   pgdata:
