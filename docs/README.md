@@ -46,6 +46,7 @@ make host=<hostname> db=<db_name> user=<username> pwd=<password> port=<db_port> 
 ```
 docker build --tag=ekyc -f api.Dockerfile .
 docker build --tag=face_match_worker -f face_match_worker.Dockerfile .
+docker build locust:v1 -f locust.Dockerfile .
 make run-dockerized-api
 ```
 

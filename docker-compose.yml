@@ -11,7 +11,7 @@ services:
       - db
       - minio
       - redis
-    env_file: .env
+    env_file: .env-docker
 
   face_match_worker:
     image: face_match_worker  
@@ -21,7 +21,7 @@ services:
       - db
       - minio
       - redis
-    env_file: .env 
+    env_file: .env-docker 
 
   db:
     image: postgres
@@ -88,6 +88,14 @@ services:
     volumes:
       - rabbitmq:/var/lib/rabbitmq/
       - rabbitmq:/var/log/rabbitmq
+
+  locust:
+    image: locust:v1
+    container_name: locust
+    ports:
+      - 8089:8089
+    volumes:
+      - ./locust/:/opt/load-testing/
 
 volumes:
   pgdata:
