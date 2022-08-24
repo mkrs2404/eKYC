@@ -23,6 +23,8 @@ func TestMain(m *testing.M) {
 		log.Fatalf("Error fetching the environment values")
 	}
 	database.Connect(os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_PORT"), logger.Silent)
+	//Migrating tables to the database
+	database.DB.AutoMigrate(&models.Plan{}, &models.Client{}, &models.File{}, &models.Api_Calls{})
 	services.SeedPlanData()
 	database.DB.Exec("DELETE FROM files")
 	database.DB.Exec("DELETE FROM clients")

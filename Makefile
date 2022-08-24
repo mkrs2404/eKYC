@@ -22,8 +22,7 @@ build-seeder:
 run-seeder:
 	@echo "Starting up docker..."
 	@docker-compose up -d --remove-orphans
-	make build-seeder
-	@./seeder.o
+	@go run cmd/seeder/main.go
 
 build-api: 
 	@echo "Building binary..." 

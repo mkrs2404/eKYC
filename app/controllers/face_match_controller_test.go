@@ -54,10 +54,11 @@ func TestFaceMatchClient(t *testing.T) {
 		}
 		ctx.Set("client", client)
 
+		testBucketName := "test"
 		//Setting separate bucket name for tests
-		ctx.Set("testBucket", "test")
+		ctx.Set("testBucket", testBucketName)
 
-		fileUUID1, fileUUID2, fileInfo1, fileInfo2 := services.SetupImageUpload(client, "face", "face")
+		fileUUID1, fileUUID2, fileInfo1, fileInfo2 := services.SetupImageUpload(client, testBucketName, "face", "face")
 
 		if data.body == "" {
 			data.body = fmt.Sprintf(`{"image1":"%s", "image2":"%s"}`, fileUUID1, fileUUID2)

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: ekyc    
+    image: ekyc
     container_name: ekyc
     ports:
       - "8080:8080"
@@ -14,24 +14,24 @@ services:
     env_file: .env
 
   face_match_worker:
-    image: face_match_worker  
+    image: face_match_worker
     container_name: face_match_worker
     depends_on:
       - rabbitmq
       - db
       - minio
       - redis
-    env_file: .env 
+    env_file: .env
 
   db:
     image: postgres
-    container_name: postgresql 
+    container_name: postgresql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_EXTENSIONS: uuid-ossp
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -43,7 +43,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_EXTENSIONS: uuid-ossp
     volumes:
-      - testpgdata:/var/lib/postgresql/data
+      - ./testpgdata:/var/lib/postgresql/data
     ports:
       - "5433:5432"
 
@@ -56,7 +56,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: mohit@one2n.in
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin-data:/var/lib/pgadmin
 
   minio:
     image: "minio/minio"
@@ -69,7 +69,7 @@ services:
       MINIO_ROOT_PASSWORD: minio123
     command: server --address ":9099" --console-address ":9000" /data
     volumes:
-      - "minio_data:/data"
+      - "./minio_data:/data"
 
   redis:
     image: redis
@@ -77,7 +77,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data
+      - ./redis_data:/data
 
   rabbitmq:
     image: rabbitmq:management-alpine
@@ -86,8 +86,8 @@ services:
       - 5672:5672
       - 15672:15672
     volumes:
-      - rabbitmq:/var/lib/rabbitmq/
-      - rabbitmq:/var/log/rabbitmq
+      - ./rabbitmq:/var/lib/rabbitmq/
+      - ./rabbitmq:/var/log/rabbitmq
 
 volumes:
   pgdata:

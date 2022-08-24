@@ -1,13 +1,15 @@
 package controllers
 
 import (
-	"github.com/mkrs2404/eKYC/app/rabbitmq"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/mkrs2404/eKYC/app/models"
+	"github.com/mkrs2404/eKYC/app/rabbitmq"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -59,6 +61,8 @@ func TestMain(m *testing.M) {
 		log.Fatalf("Error fetching the environment values")
 	}
 	database.Connect(os.Getenv("TEST_DB_HOST"), os.Getenv("TEST_DB_NAME"), os.Getenv("TEST_DB_USER"), os.Getenv("TEST_DB_PASSWORD"), os.Getenv("TEST_DB_PORT"), logger.Silent)
+	//Migrating tables to the database
+	database.DB.AutoMigrate(&models.Plan{}, &models.Client{}, &models.File{}, &models.Api_Calls{})
 	services.SeedPlanData()
 	database.DB.Exec("DELETE FROM files")
 	database.DB.Exec("DELETE FROM clients")
