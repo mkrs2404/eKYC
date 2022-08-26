@@ -1,6 +1,10 @@
 pgdata
 .DS_Store
 pgadmin-data
+rabbitmq
+redis_data
+testpgdata
+minio_data
 *.o
 .env
 docker-compose.yml

@@ -73,10 +73,11 @@ func TestAsyncOcrClient(t *testing.T) {
 		}
 		ctx.Set("client", client)
 
+		testBucketName := "test"
 		//Setting separate bucket name for tests
-		ctx.Set("testBucket", "test")
+		ctx.Set("testBucket", testBucketName)
 
-		fileUUID, _, fileInfo, _ := services.SetupImageUpload(client, "id_card", "")
+		fileUUID, _, fileInfo, _ := services.SetupImageUpload(client, testBucketName, "id_card", "")
 
 		if data.body == "" {
 			data.body = fmt.Sprintf(`{"image":"%s"}`, fileUUID)
@@ -113,10 +114,11 @@ func TestAsyncGetOcrData(t *testing.T) {
 		}
 		ctx.Set("client", client)
 
+		testBucketName := "test"
 		//Setting separate bucket name for tests
-		ctx.Set("testBucket", "test")
+		ctx.Set("testBucket", testBucketName)
 
-		fileUUID, _, fileInfo, _ := services.SetupImageUpload(client, "id_card", "")
+		fileUUID, _, fileInfo, _ := services.SetupImageUpload(client, testBucketName, "id_card", "")
 
 		api_call, err := services.SetupAsyncOcr(fileUUID.String(), "ocr", client)
 		if err != nil {

@@ -12,7 +12,13 @@ import (
 
 //SetupImageUpload uploads the files to minio and saves their data in DB, to setup the environment for tests
 //If the imgType2 is empty then only 1 file will be uploaded and saved
-func SetupImageUpload(client models.Client, imgType1 string, imgType2 string) (uuid.UUID, uuid.UUID, minio.UploadInfo, minio.UploadInfo) {
+func SetupImageUpload(client models.Client, testBucketName string, imgType1 string, imgType2 string) (uuid.UUID, uuid.UUID, minio.UploadInfo, minio.UploadInfo) {
+
+	//Creating a S3 bucket
+	err := CreateBucket(context.Background(), testBucketName)
+	if err != nil {
+		log.Fatalf("Bucket Creation failed : %v", err)
+	}
 
 	var err1, err2 error
 	var fileInfo1, fileInfo2 minio.UploadInfo
@@ -27,7 +33,7 @@ func SetupImageUpload(client models.Client, imgType1 string, imgType2 string) (u
 	}
 
 	if err1 != nil || err2 != nil {
-		log.Fatal("Upload to minio failed")
+		log.Fatalf("Upload to minio failed err1 : %v, err2 : %v", err1, err2)
 	}
 
 	//Saving file's metadata to the database

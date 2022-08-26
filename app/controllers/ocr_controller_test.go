@@ -54,7 +54,8 @@ func TestOcrClient(t *testing.T) {
 		t.Fatal("Error setting up the client")
 	}
 
-	fileUUID1, fileUUID2, fileInfo1, fileInfo2 := services.SetupImageUpload(client, "id_card", "face")
+	testBucketName := "test"
+	fileUUID1, fileUUID2, fileInfo1, fileInfo2 := services.SetupImageUpload(client, testBucketName, "id_card", "face")
 
 	for _, data := range ocrTestData {
 
@@ -64,7 +65,7 @@ func TestOcrClient(t *testing.T) {
 		ctx.Set("client", client)
 
 		//Setting separate bucket name for tests
-		ctx.Set("testBucket", "test")
+		ctx.Set("testBucket", testBucketName)
 
 		if data.body == "" {
 			if data.imgType == "id_card" {

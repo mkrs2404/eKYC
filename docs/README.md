@@ -35,6 +35,18 @@ You can create an .env file as per the [template](#env-template), or pass all th
 
 Run following commands in the root directory:
 
+- Migrate Database
+  
+```
+make run-migration
+```
+
+- Seed Database
+  
+```
+make run-seeder
+```
+
 - Run API without containerization
 
 ```
