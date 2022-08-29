@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/mkrs2404/eKYC/app/auth"
-	"github.com/mkrs2404/eKYC/app/database"
 	"github.com/mkrs2404/eKYC/app/helper"
 	"github.com/mkrs2404/eKYC/app/messages"
-	"github.com/mkrs2404/eKYC/app/models"
 	"github.com/mkrs2404/eKYC/app/resources"
+	"github.com/mkrs2404/eKYC/app/services"
+	"gorm.io/gorm"
 )
 
 //AuthRequired is the middleware to authenticate the JWT token supplied in the header
@@ -44,9 +44,23 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		//Setting the client object to the context for the next http.handler, when the token is authentic
-		var client models.Client
-		database.DB.First(&client, clientId)
+		//Setting the client object to the context for the next http.handler, when the token has been authenticated
+		client, err := services.GetClient(clientId)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"errorMsg": messages.CLIENT_NOT_FOUND,
+				})
+				c.Abort()
+				return
+			} else {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"errorMsg": messages.DB_FAILURE,
+				})
+				c.Abort()
+				return
+			}
+		}
 		c.Set("client", client)
 		c.Next()
 	}

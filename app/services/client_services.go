@@ -50,3 +50,10 @@ func SetupClient() (string, models.Client, error) {
 
 	return token, client, err
 }
+
+//GetClient finds the client with the given ID
+func GetClient(clientID int) (models.Client, error) {
+	var client models.Client
+	err := database.DB.First(&client, clientID).Error
+	return client, err
+}

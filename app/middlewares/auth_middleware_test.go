@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/go-cmp/cmp"
 	"github.com/joho/godotenv"
 	"github.com/mkrs2404/eKYC/app/database"
 	"github.com/mkrs2404/eKYC/app/models"
@@ -52,7 +51,7 @@ func TestAuthMiddleware(t *testing.T) {
 	clientInterface, _ := ctx.Get("client")
 	authenticatedClient := clientInterface.(models.Client)
 
-	if !cmp.Equal(client, authenticatedClient) {
+	if client.ID != authenticatedClient.ID || client.Name != authenticatedClient.Name || client.Email != authenticatedClient.Email || client.Plan != authenticatedClient.Plan {
 		t.Errorf("Expected %v, Got %v", client, authenticatedClient)
 	}
 
